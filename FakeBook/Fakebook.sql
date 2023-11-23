@@ -1,5 +1,5 @@
 create database Fakebook
-go
+
 
 USE Fakebook
 
