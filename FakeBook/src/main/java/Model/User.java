@@ -21,13 +21,12 @@ public class User {
     private String email;
     private String firstName;
     private String lastName;
-    private String inforName;
     private Timestamp registerDate;
     
     public User() {
     }
 
-    public User(int id, String username, String password, String gender, Date birthday, String phone, String email, String firstName, String lastName, String inforName, Timestamp registerDate) {
+    public User(int id, String username, String password, String gender, Date birthday, String phone, String email, String firstName, String lastName, Timestamp registerDate) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -37,7 +36,6 @@ public class User {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.inforName = inforName;
         this.registerDate = registerDate;
     }
 
@@ -120,14 +118,7 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
-    public String getInforName() {
-        return inforName;
-    }
-
-    public void setInforName(String inforName) {
-        this.inforName = inforName;
-    }
+    
     public String getName(){
         return this.firstName + " " + this.lastName;
     }
