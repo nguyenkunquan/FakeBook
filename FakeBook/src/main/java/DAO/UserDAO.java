@@ -139,14 +139,13 @@ public class UserDAO implements DAOInterface<User> {
         return list;
     }
 
-    @Override
-    public User selectById(User u) {
+    public User selectByUserName(String user_name) {
         User result = null;
         try {
             Connection connection = JDBCUtil.getConnection();
             Statement stmt = connection.createStatement();
             // get data from table 'customer'
-            ResultSet rs = stmt.executeQuery("select * from USER_Account where id_user =" + u.getId());
+            ResultSet rs = stmt.executeQuery("select * from USER_Account where user_name =" +"'" +user_name + "'");
             // map customer data
             while (rs.next()) {
                 User user = new User();
@@ -168,6 +167,11 @@ public class UserDAO implements DAOInterface<User> {
             System.out.println("errror:: " + e.getMessage());
         }
         return result;
+    }
+
+    @Override
+    public User selectById(User t) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }
