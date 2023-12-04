@@ -10,22 +10,27 @@ import java.util.List;
 
 public class LoginService {
 
-        private UserDAO userDAO;
+    private UserDAO userDAO;
 
-        public LoginService() {
-            this.userDAO = UserDAO.getInstance();
-        }
+    public LoginService() {
+        this.userDAO = UserDAO.getInstance();
+    }
 
-        public int insertUser(User user) {
-           List<User> listUser = userDAO.selectAll();
-           if(!listUser.isEmpty()){
-            for (User user1 : listUser) {
-                if(user1.getUsername().equals(user.getUsername())
-                        ||user1.getId().equals(user.getId()))
-                    return 0;
+    public int insertUser(User user) {
+        return userDAO.insert(user);
+    }
+
+    public int CheckLogin(String user_name, String pass) {
+        User user = null;
+        user = userDAO.selectByUserName(user_name);
+        if (user != null) {
+            if (user.getPassword().equals(pass)) {
+                return 1;
+            } else {
+                return 0;
             }
-           }
-            return userDAO.insert(user);
         }
+        return 0;
+    }
 
 }
