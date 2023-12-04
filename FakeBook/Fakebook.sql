@@ -4,9 +4,9 @@ USE Fakebook;
 
 -- Tạo bảng USER_Account
 CREATE TABLE user_account (
-    id_user VARCHAR(10) PRIMARY KEY NOT null,
-    user_name NVARCHAR(50) NOT NULL,
-	 pass VARCHAR(50) NOT NULL,
+    id_user VARCHAR(10) NOT null,
+    user_name VARCHAR(50) PRIMARY KEY NOT NULL,
+    pass VARCHAR(50) NOT NULL,
     gender VARCHAR(10),
     birthday  DATE,
     phone VARCHAR(10),
@@ -16,46 +16,46 @@ CREATE TABLE user_account (
     avatar VARCHAR(255)
 );
 SELECT * FROM user_account
-
+WHERE user_name = 'Submible'
 -- Tạo bảng FRIENDSHIP
 CREATE TABLE FRIENDSHIP (
-    id_user_1 VARCHAR(10) NOT NULL,
-    id_user_2 VARCHAR(10) NOT NULL,
-    FOREIGN KEY(id_user_1) REFERENCES USER_Account(id_user),
-    FOREIGN KEY(id_user_2) REFERENCES USER_Account(id_user),
-    PRIMARY KEY(id_user_1, id_user_2)
+    user_name_1 VARCHAR(50) NOT NULL,
+    user_name_2 VARCHAR(50) NOT NULL,
+    FOREIGN KEY(user_name_1) REFERENCES USER_Account(user_name),
+    FOREIGN KEY(user_name_2) REFERENCES USER_Account(user_name),
+    PRIMARY KEY(user_name_1, user_name_2)
 );
 
 -- Tạo bảng POST
 CREATE TABLE POST (
     id_post INT AUTO_INCREMENT PRIMARY KEY,
-    content NVARCHAR(100),
+    content NVARCHAR(10000),
     img VARCHAR(10),
     like_num INT,
     comment INT,
-    id_user VARCHAR(10) NOT NULL,
+    user_name VARCHAR(50) NOT NULL,
     createdTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(id_user) REFERENCES USER_Account(id_user)
+    FOREIGN KEY(user_name) REFERENCES USER_Account(user_name)
 );
 
 -- Tạo bảng LIKE_status
 CREATE TABLE LIKE_status (
     id_post INT NOT NULL,
-    id_user VARCHAR(10) NOT NULL,
+    user_name VARCHAR(50) NOT NULL,
     FOREIGN KEY(id_post) REFERENCES POST(id_post),
-    FOREIGN KEY(id_user) REFERENCES USER_Account(id_user),
-    PRIMARY KEY(id_post, id_user)
+    FOREIGN KEY(user_name) REFERENCES USER_Account(user_name),
+    PRIMARY KEY(id_post, user_name)
 );
 
 -- Tạo bảng COMMENT_status
 CREATE TABLE COMMENT_status (
     id_post INT NOT NULL,
-    id_user VARCHAR(10) NOT NULL,
-    content NVARCHAR(50),
+    user_name VARCHAR(50) NOT NULL,
+    content NVARCHAR(10000),
     createdTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(id_post) REFERENCES POST(id_post),
-    FOREIGN KEY(id_user) REFERENCES USER_Account(id_user),
-    PRIMARY KEY (id_post, id_user, content)
+    FOREIGN KEY(user_name) REFERENCES USER_Account(user_name),
+    PRIMARY KEY (id_post, user_name)
 );
 
 -- Tạo trigger IncreaseCommentNum
