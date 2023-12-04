@@ -7,12 +7,9 @@ package Model;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-/**
- *
- * @author ADMIN
- */
+
 public class User {
-    private int id;
+    private String id;
     private String username;
     private String password;
     private String gender;
@@ -21,12 +18,12 @@ public class User {
     private String email;
     private String firstName;
     private String lastName;
-    private Timestamp registerDate;
+    private String avatar;
     
     public User() {
     }
 
-    public User(int id, String username, String password, String gender, Date birthday, String phone, String email, String firstName, String lastName, Timestamp registerDate) {
+    public User(String id, String username, String password, String gender, Date birthday, String phone, String email, String firstName, String lastName, String avatar) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -36,23 +33,17 @@ public class User {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.registerDate = registerDate;
+        this.avatar = avatar;
+
     }
 
-    public Timestamp getRegisterDate() {
-        return registerDate;
-    }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public void setRegisterDate(Timestamp registerDate) {
-        this.registerDate = registerDate;
     }
     
     public String getUsername() {
@@ -122,4 +113,13 @@ public class User {
     public String getName(){
         return this.firstName + " " + this.lastName;
     }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+    
 }
