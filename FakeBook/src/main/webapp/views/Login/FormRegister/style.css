@@ -2,7 +2,6 @@
   margin: 0px;
   padding: 0px;
 }
-/*Background Section Start*/
 body {
   font-family: "Roboto", sans-serif;
   background-image: url(background.png);
@@ -18,8 +17,6 @@ body::before {
   top: -70px;
   opacity: 0.6;
 }
-/*Background Section end*/
-/*From Section Start*/
 form {
   width: 425px;
   height: 600px;
@@ -31,6 +28,7 @@ form {
   z-index: 10;
   position: relative;
 }
+
 #all {
   width: 180px;
   border-radius: 5px;
@@ -63,7 +61,7 @@ form {
   font-weight: bold;
   border: none;
   margin-left: 25%;
-  margin-top: 0px;
+  margin-top: 20px;
 }
 .submit:hover {
   opacity: 60%;
