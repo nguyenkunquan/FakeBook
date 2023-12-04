@@ -8,7 +8,7 @@ CREATE TABLE user_account (
     user_name NVARCHAR(50) NOT NULL,
 	 pass VARCHAR(50) NOT NULL,
     gender VARCHAR(10),
-    birthdate DATE,
+    birthday  DATE,
     phone VARCHAR(10),
     email VARCHAR(50),
     first_Name NVARCHAR(50),
