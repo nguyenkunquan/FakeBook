@@ -3,16 +3,17 @@ CREATE DATABASE IF NOT EXISTS Fakebook;
 USE Fakebook;
 
 -- Tạo bảng USER_Account
-CREATE TABLE USER_Account (
+CREATE TABLE user_account (
     id_user INT AUTO_INCREMENT PRIMARY KEY,
     user_name NVARCHAR(50) NOT NULL,
-	pass VARCHAR(50) NOT NULL,
+	 pass VARCHAR(50) NOT NULL,
     gender VARCHAR(10),
     birthdate DATE,
     phone VARCHAR(10),
     email VARCHAR(50),
     first_Name NVARCHAR(50),
     last_Name NVARCHAR(50),
+    avatar VARCHAR(255),
     registerTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
