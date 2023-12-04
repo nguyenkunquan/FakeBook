@@ -15,29 +15,22 @@ public class Post {
     private int likeNum;
     private int commentNum;
     private int idUser;
-    private Timestamp createdTime;
 
     public Post() {
     }
 
-    public Post(String content, String img, int likeNum, int commentNum, int idUser, Timestamp createdTime) {
+    public Post(int id, String content, String img, int likeNum, int commentNum, int idUser) {
         this.content = content;
         this.img = img;
         this.likeNum = likeNum;
         this.commentNum = commentNum;
         this.idUser = idUser;
-        this.createdTime = createdTime;
     }
 
-    public Timestamp getCreatedTime() {
-        return createdTime;
-    }
 
-    public void setCreatedTime(Timestamp createdTime) {
-        this.createdTime = createdTime;
+    public void setId(int id) {
+        this.id = id;
     }
-
-    
     
     public int getId() {
         return id;
