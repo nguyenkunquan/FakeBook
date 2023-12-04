@@ -19,8 +19,8 @@
           <p> around you on Fakebook.</p>
         </div>
           <form method="POST" action="./Login" >
-              <input name="user_name_l" type="text" placeholder="User name" required>
-              <input name="passwork_l" type="password" placeholder="Password" required>
+              <input name="user_name" type="text" placeholder="User name" required>
+              <input name="passwork" type="password" placeholder="Password" required>
           <div class="link">
             <button type="submit" class="login">Login</button>
             <a href="#" class="forgot">Forgot password?</a>
