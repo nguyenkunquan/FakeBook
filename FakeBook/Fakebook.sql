@@ -1,10 +1,10 @@
 ﻿-- Tạo cơ sở dữ liệu Fakebook
-CREATE DATABASE IF NOT EXISTS Fakebook;
+CREATE DATABASE Fakebook;
 USE Fakebook;
 
 -- Tạo bảng USER_Account
 CREATE TABLE user_account (
-    id_user INT AUTO_INCREMENT PRIMARY KEY,
+    id_user VARCHAR(10) PRIMARY KEY NOT null,
     user_name NVARCHAR(50) NOT NULL,
 	 pass VARCHAR(50) NOT NULL,
     gender VARCHAR(10),
@@ -13,14 +13,14 @@ CREATE TABLE user_account (
     email VARCHAR(50),
     first_Name NVARCHAR(50),
     last_Name NVARCHAR(50),
-    avatar VARCHAR(255),
-    registerTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    avatar VARCHAR(255)
 );
+SELECT * FROM user_account
 
 -- Tạo bảng FRIENDSHIP
 CREATE TABLE FRIENDSHIP (
-    id_user_1 INT NOT NULL,
-    id_user_2 INT NOT NULL,
+    id_user_1 VARCHAR(10) NOT NULL,
+    id_user_2 VARCHAR(10) NOT NULL,
     FOREIGN KEY(id_user_1) REFERENCES USER_Account(id_user),
     FOREIGN KEY(id_user_2) REFERENCES USER_Account(id_user),
     PRIMARY KEY(id_user_1, id_user_2)
@@ -33,7 +33,7 @@ CREATE TABLE POST (
     img VARCHAR(10),
     like_num INT,
     comment INT,
-    id_user INT NOT NULL,
+    id_user VARCHAR(10) NOT NULL,
     createdTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(id_user) REFERENCES USER_Account(id_user)
 );
@@ -41,7 +41,7 @@ CREATE TABLE POST (
 -- Tạo bảng LIKE_status
 CREATE TABLE LIKE_status (
     id_post INT NOT NULL,
-    id_user INT NOT NULL,
+    id_user VARCHAR(10) NOT NULL,
     FOREIGN KEY(id_post) REFERENCES POST(id_post),
     FOREIGN KEY(id_user) REFERENCES USER_Account(id_user),
     PRIMARY KEY(id_post, id_user)
@@ -50,7 +50,7 @@ CREATE TABLE LIKE_status (
 -- Tạo bảng COMMENT_status
 CREATE TABLE COMMENT_status (
     id_post INT NOT NULL,
-    id_user INT NOT NULL,
+    id_user VARCHAR(10) NOT NULL,
     content NVARCHAR(50),
     createdTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(id_post) REFERENCES POST(id_post),
@@ -93,4 +93,8 @@ BEGIN
 END;
 //
 DELIMITER ;
- 
+DROP TABLE user_account
+DROP TABLE FRIENDSHIP
+DROP TABLE POST
+DROP TABLE LIKE_status
+DROP TABLE COMMENT_status
