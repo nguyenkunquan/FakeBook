@@ -33,4 +33,16 @@ public class LoginService {
         return 0;
     }
 
+    public int CheckForget(String user_name) {
+        User user = null;
+        user = userDAO.selectByUserName(user_name);
+        if (user != null) {
+            return 1;
+        }
+        return 0;
+    }
+    
+    public int checkResetPassword(String user_name, String password){
+        return userDAO.updatePassword(user_name, password);
+    }
 }
