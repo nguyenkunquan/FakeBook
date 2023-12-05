@@ -5,15 +5,13 @@
 package DAO;
 
 import java.util.List;
+import java.util.Map;
 
-/**
- *
- * @author ADMIN
- */
 public interface DAOInterface<T> {
     public int insert(T t);
     public int update(T t);
     public int delete(T t);
     public List<T> selectAll();
     public T selectById(T t);
+    public List<Map<String,Object>> selectAllPost();
 }
