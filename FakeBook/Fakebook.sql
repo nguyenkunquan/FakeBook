@@ -59,6 +59,14 @@ CREATE TABLE COMMENT_status (
     PRIMARY KEY (id_post, user_name)
 );
 
+-- Tạo bảng MYPROFILE_image
+CREATE TABLE MYPROFILE_image (
+	user_name VARCHAR(50) NOT NULL,
+    avatar_image VARCHAR(255),
+    cover_image VARCHAR(255),
+    FOREIGN KEY(user_name) REFERENCES USER_Account(user_name),
+    PRIMARY KEY (user_name)
+
 -- Tạo trigger IncreaseCommentNum
 DELIMITER //
 CREATE TRIGGER IncreaseCommentNum
