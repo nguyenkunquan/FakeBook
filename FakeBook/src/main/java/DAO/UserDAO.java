@@ -26,13 +26,11 @@ public class UserDAO implements DAOInterface<User> {
     public int insert(User user) {
         try {
             Connection connection = JDBCUtil.getConnection();
-            String insertQuery = "INSERT INTO USER_Account (id_user, user_name, pass, gender, birthday, phone, email, first_Name, last_Name, avatar)"
-                               + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String insertQuery = "INSERT INTO USER_Account (id_user, user_name, pass, gender, birthday, phone, email, first_Name, last_Name, avatar, background)"
+                               + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             // Tạo PreparedStatement
             PreparedStatement preparedStatement;
-            System.out.println("abc");
             preparedStatement = connection.prepareStatement(insertQuery);
-            System.out.println("abd");
             // Thiết lập các tham số trong truy vấn
             preparedStatement.setString(1, user.getId());
             preparedStatement.setString(2, user.getUsername());
@@ -44,6 +42,7 @@ public class UserDAO implements DAOInterface<User> {
             preparedStatement.setString(8, user.getFirstName());
             preparedStatement.setString(9, user.getLastName());
             preparedStatement.setString(10, user.getAvatar());
+            preparedStatement.setString(11, user.getBackground());
             // Thực hiện INSERT
             int rowsInserted = preparedStatement.executeUpdate();
             JDBCUtil.closeConnection(connection);
@@ -59,14 +58,14 @@ public class UserDAO implements DAOInterface<User> {
         try {
             Connection connection = JDBCUtil.getConnection();
             String insertQuery = "UPDATE USER_Account u"
-                               + "SET u.user_name = ?, u.pass = ?, u.gender = ?, u.birthday = ?, "
-                               + "    u.phone = ?, u.email = ?, u.first_Name = ?, u.last_Name = ?, u.avatar = ?"
-                               + "WHERE u.id_user = ?";
-            // Tạo PreparedStatement
+                               + "SET u.id_user = ?, u.pass = ?, u.gender = ?, u.birthday = ?, "
+                               + "    u.phone = ?, u.email = ?, u.first_Name = ?, u.last_Name = ?, u.avatar = ?, u.backgroud = ?"
+                               + "WHERE u.user_name = ?";
+            // Tạo PreparedStatement 
             PreparedStatement preparedStatement;
             preparedStatement = connection.prepareStatement(insertQuery);
             // Thiết lập các tham số trong truy vấn
-            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(1, user.getId());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getGender());
             preparedStatement.setDate(4, user.getBirthday());
@@ -75,7 +74,8 @@ public class UserDAO implements DAOInterface<User> {
             preparedStatement.setString(7, user.getFirstName());
             preparedStatement.setString(8, user.getLastName());
             preparedStatement.setString(9, user.getAvatar());
-            preparedStatement.setString(10, user.getId());
+            preparedStatement.setString(10, user.getBackground());
+            preparedStatement.setString(11, user.getUsername());
 
             // Thực hiện INSERT
             int rowsInserted = preparedStatement.executeUpdate();
@@ -86,28 +86,7 @@ public class UserDAO implements DAOInterface<User> {
         }
         return 0;
     }
-
-    @Override
-    public int delete(User user) {
-        try {
-            Connection connection = JDBCUtil.getConnection();
-            String insertQuery = "DELETE FROM USER_Account WHERE id_user = ?";
-            // Tạo PreparedStatement
-            PreparedStatement preparedStatement;
-            preparedStatement = connection.prepareStatement(insertQuery);
-            // Thiết lập các tham số trong truy vấn
-            preparedStatement.setString(1, user.getId());
-
-            // Thực hiện delete
-            int rowsInserted = preparedStatement.executeUpdate();
-            JDBCUtil.closeConnection(connection);
-            return rowsInserted;
-        } catch (SQLException ex) {
-            System.out.println("error: " + ex.getMessage());
-        }
-        return 0;
-    }
-
+    
     @Override
     public List<User> selectAll() {
         List<User> list = new ArrayList<>();
@@ -130,6 +109,7 @@ public class UserDAO implements DAOInterface<User> {
                 user.setFirstName(rs.getString(8));
                 user.setLastName(rs.getString(9));
                 user.setAvatar(rs.getString(10));
+                user.setBackground(rs.getString(11));
                 list.add(user);
             }
             JDBCUtil.closeConnection(connection);
@@ -159,6 +139,7 @@ public class UserDAO implements DAOInterface<User> {
                 user.setFirstName(rs.getString(8));
                 user.setLastName(rs.getString(9));
                 user.setAvatar(rs.getString(10));
+                user.setBackground(rs.getString(11));
                 result = user;
                 break;
             }
@@ -171,6 +152,11 @@ public class UserDAO implements DAOInterface<User> {
 
     @Override
     public User selectById(User t) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public int delete(User t) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
