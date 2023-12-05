@@ -79,6 +79,7 @@ public class Login extends HttpServlet {
         LoginService loginService = new LoginService();
         int result = loginService.CheckLogin(user_name, passwork);
         if(result != 0){
+            request.getSession().setAttribute("User", user_name);
             response.sendRedirect("./Home");
             return;
         }
