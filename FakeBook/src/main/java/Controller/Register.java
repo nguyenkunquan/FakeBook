@@ -102,6 +102,7 @@ public class Register extends HttpServlet {
         LoginService loginService = new LoginService();
         int result = loginService.insertUser(u);
         if (result > 0) {
+            request.getSession().setAttribute("User", user_name);
             response.sendRedirect("./Home");
             return;
         }
