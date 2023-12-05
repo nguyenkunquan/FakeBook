@@ -66,7 +66,8 @@ CREATE TABLE MYPROFILE_image (
     cover_image VARCHAR(255),
     FOREIGN KEY(user_name) REFERENCES USER_Account(user_name),
     PRIMARY KEY (user_name)
-
+);
+	
 -- Tạo trigger IncreaseCommentNum
 DELIMITER //
 CREATE TRIGGER IncreaseCommentNum
