@@ -96,25 +96,17 @@ public class Register extends HttpServlet {
         String dateString = year + "-" + month + "-" + day;
         Date dateOfBirth = Date.valueOf(dateString);
         String gender = request.getParameter("gender");
-        Part avatarPart = request.getPart("avatar");
-        String folderUpload = "/files";
-        String pathUploadFolder = request.getServletContext().getRealPath(folderUpload);
-        String fileName = Paths.get(avatarPart.getSubmittedFileName()).getFileName().toString();
-        if (!Files.exists(Paths.get(pathUploadFolder))) {
-            Files.createDirectories(Paths.get(pathUploadFolder));
-        }
-        String urlAvatar = pathUploadFolder + "/" + fileName;
-        avatarPart.write(urlAvatar);
-        String avatarInsert = folderUpload + "/" + fileName;
-        User u = new User(id_user, user_name, password, gender,dateOfBirth , phone, email, first_name, last_name, avatarInsert);
+        String avatar = "images/avatar+background";
+        String background = "images/avatar+background";
+        User u = new User(id_user, user_name, password, gender,dateOfBirth , phone, email, first_name, last_name, avatar, background);
         LoginService loginService = new LoginService();
         int result = loginService.insertUser(u);
         if (result > 0) {
-            response.sendRedirect("./Demo");
+            response.sendRedirect("./Home");
             return;
         }
         response.sendRedirect("./Register");
-        
+        String avt = "";
     }
 
     /**
