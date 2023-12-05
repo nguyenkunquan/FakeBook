@@ -6,14 +6,15 @@ USE Fakebook;
 CREATE TABLE user_account (
     id_user VARCHAR(10) NOT null,
     user_name VARCHAR(50) PRIMARY KEY NOT NULL,
-    pass VARCHAR(50) NOT NULL,
+	 pass VARCHAR(50) NOT NULL,
     gender VARCHAR(10),
     birthday  DATE,
-    phone VARCHAR(10),
+    phone VARCHAR(20),
     email VARCHAR(50),
     first_Name NVARCHAR(50),
     last_Name NVARCHAR(50),
-    avatar VARCHAR(255)
+    avatar VARCHAR(255),
+    backgroud VARCHAR(255)
 );
 SELECT * FROM user_account
 WHERE user_name = 'Submible'
