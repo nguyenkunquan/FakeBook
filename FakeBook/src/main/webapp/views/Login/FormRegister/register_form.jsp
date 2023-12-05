@@ -15,8 +15,8 @@
         <!--Facebook Signup from start-->
         <div class="main">
             <form method="POST" action="./Register" enctype="multipart/form-data">
-                  <h2 class="first_title" style=" font-size: 40px;
-                  padding: 10px 10px 10px 10px;">Sign Up</h2>
+                <h2 class="first_title" style=" font-size: 40px;
+                    padding: 10px 10px 10px 10px;">Sign Up</h2>
                 <p class="first_sub_title"> </p>
                 <hr />
                 <!--Input section start-->
@@ -30,15 +30,21 @@
                     <br />
                     <input name="password" type="password" placeholder="New password" id="all1" required />
                     <br />
-                    <input name="phone" type="phone" placeholder="Phone number"  id="all1" required />
+                    <input name="phone" type="number" placeholder="Phone number"  id="all1" required />
                     <br />
                     <input name="email" type="email" placeholder="Email"  id="all1" required />
                     <br />
                 </div>
-                <!--Input section end-->
-                <!--Date of Birth section start-->
-                <!--<p class="sub_title_2" id="sub_title">Date of Birth</p>-->
-                <select name="daySelect">
+                <p class="sub_title_2" id="sub_title" style="margin-left: 12px; margin-top: 10px">Date of Birth</p>
+                <select name="daySelect" style="
+                        width: 125px;
+                        margin-left: 10px;
+                        margin-top: 10px;
+                        height: 35px;
+                        font-size: 15px;
+                        background: none;
+                        border: 1px solid #aaaa;
+                        border-radius: 5px;">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -71,7 +77,15 @@
                     <option>30</option>
                     <option>31</option>
                 </select>
-                <select name="monthSelect">
+                <select name="monthSelect" style="
+                        width: 125px;
+                        margin-left: 10px;
+                        margin-top: 10px;
+                        height: 35px;
+                        font-size: 15px;
+                        background: none;
+                        border: 1px solid #aaaa;
+                        border-radius: 5px;">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -85,7 +99,15 @@
                     <option>11</option>
                     <option>12</option>
                 </select>
-                <select name="yearSelect">
+                <select name="yearSelect" style="
+                        width: 125px;
+                        margin-left: 10px;
+                        margin-top: 10px;
+                        height: 35px;
+                        font-size: 15px;
+                        background: none;
+                        border: 1px solid #aaaa;
+                        border-radius: 5px;">
                     <option>2022</option>
                     <option>2021</option>
                     <option>2020</option>
@@ -123,10 +145,7 @@
                         </select>
                     </div>
                 </div>
-                <div  style="margin-left: 12px; margin-top: 0px" >
-                    <label for="formFile" class="form-label" style="font-size: 20px">Choose avatar</label>
-                    <input name="avatar" type="file" id="formFile">
-                </div>
+                <br />
                 <div ><input type="submit" value="Signup" class="submit" /></div>
                 <br />
 
