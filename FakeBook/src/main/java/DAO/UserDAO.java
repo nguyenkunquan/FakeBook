@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import utilities.JDBCUtil;
 
-
 public class UserDAO implements DAOInterface<User> {
 
     public static UserDAO getInstance() {
@@ -27,7 +26,7 @@ public class UserDAO implements DAOInterface<User> {
         try {
             Connection connection = JDBCUtil.getConnection();
             String insertQuery = "INSERT INTO USER_Account (id_user, user_name, pass, gender, birthday, phone, email, first_Name, last_Name, avatar, background)"
-                               + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             // Tạo PreparedStatement
             PreparedStatement preparedStatement;
             preparedStatement = connection.prepareStatement(insertQuery);
@@ -58,9 +57,9 @@ public class UserDAO implements DAOInterface<User> {
         try {
             Connection connection = JDBCUtil.getConnection();
             String insertQuery = "UPDATE USER_Account u"
-                               + "SET u.id_user = ?, u.pass = ?, u.gender = ?, u.birthday = ?, "
-                               + "    u.phone = ?, u.email = ?, u.first_Name = ?, u.last_Name = ?, u.avatar = ?, u.backgroud = ?"
-                               + "WHERE u.user_name = ?";
+                    + "SET u.id_user = ?, u.pass = ?, u.gender = ?, u.birthday = ?, "
+                    + "    u.phone = ?, u.email = ?, u.first_Name = ?, u.last_Name = ?, u.avatar = ?, u.backgroud = ?"
+                    + "WHERE u.user_name = ?";
             // Tạo PreparedStatement 
             PreparedStatement preparedStatement;
             preparedStatement = connection.prepareStatement(insertQuery);
@@ -86,7 +85,32 @@ public class UserDAO implements DAOInterface<User> {
         }
         return 0;
     }
-    
+
+    public int updatePassword(String user_name, String password) {
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String updateQuery = "UPDATE USER_Account u SET u.pass = ? WHERE u.user_name = ?";
+//            user_name = "phuc@email.com";
+            // Tạo PreparedStatement 
+            PreparedStatement preparedStatement;
+            preparedStatement = connection.prepareStatement(updateQuery);
+
+            // Thiết lập các tham số trong truy vấn
+            preparedStatement.setString(1, password);
+            preparedStatement.setString(2, user_name);
+
+            // Thực hiện UPDATE
+            int rowsUpdated = preparedStatement.executeUpdate();
+
+            JDBCUtil.closeConnection(connection);
+            return rowsUpdated;
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+            ex.printStackTrace(); // In ra thông tin lỗi để debug
+        }
+        return 0;
+    }
+
     @Override
     public List<User> selectAll() {
         List<User> list = new ArrayList<>();
@@ -125,7 +149,7 @@ public class UserDAO implements DAOInterface<User> {
             Connection connection = JDBCUtil.getConnection();
             Statement stmt = connection.createStatement();
             // get data from table 'customer'
-            ResultSet rs = stmt.executeQuery("select * from USER_Account where user_name =" +"'" +user_name + "'");
+            ResultSet rs = stmt.executeQuery("select * from USER_Account where user_name =" + "'" + user_name + "'");
             // map customer data
             while (rs.next()) {
                 User user = new User();
