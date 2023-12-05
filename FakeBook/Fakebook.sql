@@ -14,7 +14,7 @@ CREATE TABLE user_account (
     first_Name NVARCHAR(50),
     last_Name NVARCHAR(50),
     avatar VARCHAR(255),
-    backgroud VARCHAR(255)
+    background VARCHAR(255)
 );
 SELECT * FROM user_account
 WHERE user_name = 'Submible'
