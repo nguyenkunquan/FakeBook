@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import Service.LoginService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -58,7 +59,7 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher("/views/Login/FormLogin/login_form.html");
+        RequestDispatcher rd = request.getRequestDispatcher("/views/Login/FormLogin/login_form.jsp");
         rd.forward(request, response);
     }
 
@@ -73,7 +74,15 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String user_name = request.getParameter("user_name");
+        String passwork = request.getParameter("passwork");
+        LoginService loginService = new LoginService();
+        int result = loginService.CheckLogin(user_name, passwork);
+        if(result != 0){
+            response.sendRedirect("./Home");
+            return;
+        }
+        response.sendRedirect("./Login");
     }
 
     /**
