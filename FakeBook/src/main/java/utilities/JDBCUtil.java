@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class JDBCUtil {
 
-    private static final String DB_URL = "jdbc:mysql://localhost:1709/fakebook";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/fakebook";
     private static final String USER_NAME = "root";
     private static final String PASSWORD = "";
 
