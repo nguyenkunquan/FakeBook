@@ -21,6 +21,9 @@
 }
 
 body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     background: var(--body-color);
     transition: background 0.3s;
 }
@@ -112,6 +115,7 @@ ul.navlogo li img {
 
 .container {
     display: flex;
+    flex: 1;
     justify-content: space-between;
     padding: 13px 5%;
 }
