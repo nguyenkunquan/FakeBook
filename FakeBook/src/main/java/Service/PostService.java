@@ -41,7 +41,7 @@ public class PostService {
 
         return conn;
     }
-        public int insertCustomer(int id, String content, String img , int likeNum, int commentNum, int idUser) {
+        public int insertPost(int id, String content, String img , int likeNum, int commentNum, int idUser) {
         try {
             String insertQuery = "INSERT INTO POST (id_post, content, img, like_num, comment_num, user_name) VALUES (?, ?, ?, ?, ?, ?)";
             // Tạo PreparedStatement
