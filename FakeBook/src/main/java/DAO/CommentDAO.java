@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import java.util.Map;
 import Model.Comment;
 import java.util.List;
 
@@ -41,5 +42,11 @@ public class CommentDAO implements DAOInterface<Comment>{
     public Comment selectById(Comment t) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+    @Override
+    public List<Map<String, Object>> selectAllPost() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
     
 }
