@@ -16,3 +16,15 @@ function darkModeON(){
 function LoadMoreToggle(){
     LoadMoreBackground.classList.toggle("loadMoreToggle");
 };
+function validateSearchForm() {
+    var searchInput = document.getElementById('searchInput').value;
+
+    // Kiểm tra nếu trường nhập trống
+    if (searchInput.trim() === "") {
+        //alert("Please enter a search term.");
+        return false; // Ngăn chặn việc gửi biểu mẫu nếu trường nhập trống
+    }
+
+    // Tiếp tục gửi biểu mẫu nếu trường nhập không trống
+    return true;
+}
