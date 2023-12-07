@@ -50,13 +50,13 @@ CREATE TABLE LIKE_status (
 
 -- Tạo bảng COMMENT_status
 CREATE TABLE COMMENT_status (
+    id_comment INT AUTO_INCREMENT PRIMARY KEY,
     id_post INT NOT NULL,
     user_name VARCHAR(50) NOT NULL,
     content NVARCHAR(10000),
     createdTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(id_post) REFERENCES POST(id_post),
-    FOREIGN KEY(user_name) REFERENCES USER_Account(user_name),
-    PRIMARY KEY (id_post, user_name)
+    FOREIGN KEY(user_name) REFERENCES USER_Account(user_name)
 );
 	
 -- Tạo trigger IncreaseCommentNum
@@ -76,7 +76,23 @@ BEGIN
 END;
 //
 DELIMITER ;
+-- Tạo trigger DecreaseCommentNum
+DELIMITER //
+CREATE TRIGGER DecreaseCommentNum
+AFTER DELETE
+ON COMMENT_status FOR EACH ROW
+BEGIN
+    DECLARE postId INT;
+    SELECT OLD.id_post INTO postId;
 
+    IF EXISTS (SELECT 1 FROM POST WHERE id_post = postId) THEN
+        UPDATE POST
+        SET comment = comment - 1
+        WHERE id_post = postId;
+    END IF;
+END;
+//
+DELIMITER ;
 -- Tạo trigger IncreaseLikeNum
 DELIMITER //
 CREATE TRIGGER IncreaseLikeNum
@@ -93,6 +109,22 @@ BEGIN
     END IF;
 END;
 //
+DELIMITER ;
+-- Tạo trigger DecreaseLikeNum
+DELIMITER //
+CREATE TRIGGER DecreaseLikeNum
+AFTER DELETE
+ON LIKE_status FOR EACH ROW
+BEGIN
+    DECLARE postId INT;
+    SELECT OLD.id_post INTO postId;
+
+    IF EXISTS (SELECT 1 FROM POST WHERE id_post = postId) THEN
+        UPDATE Pcomment_statusOST
+        SET like_num = like_num - 1
+        WHERE id_post = postId;
+    END IF;
+END;
 DELIMITER ;
 DROP TABLE user_account
 DROP TABLE FRIENDSHIP
