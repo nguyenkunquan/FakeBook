@@ -31,7 +31,7 @@ CREATE TABLE FRIENDSHIP (
 CREATE TABLE POST (
     id_post INT AUTO_INCREMENT PRIMARY KEY,
     content NVARCHAR(10000),
-    img VARCHAR(10),
+    img VARCHAR(255),
     like_num INT,
     comment INT,
     user_name VARCHAR(50) NOT NULL,
