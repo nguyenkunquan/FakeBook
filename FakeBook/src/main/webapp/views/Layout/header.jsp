@@ -4,15 +4,13 @@
     Author     : ADMIN
 --%>
 
+<%@page import="Service.MyProfileService"%>
+<%@page import="Model.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
-    <%@page import="Model.User"%>
-    <%@page import="javax.servlet.http.HttpSession"%>
 <%
-
     String search = request.getAttribute("search_name") != null ? (String)request.getAttribute("search_name") : null;
-    User user_profile = (User) request.getSession().getAttribute("user_name_pro");
-
+    String myUserProfile = (String) request.getSession().getAttribute("User");
+    User u = new MyProfileService().getMyProfileByUserName(myUserProfile);;
 %>
 <!DOCTYPE html>
 <html>
@@ -20,18 +18,17 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
         <link rel="stylesheet" href="assets/css/style.css">
-        <title>Fakebook</title>
+        <title>Socialbook</title>
         <script src="https://kit.fontawesome.com/ef7e2b893b.js" crossorigin="anonymous"></script>
     </head>
     
     <nav class="navbar">
-        <div class="nav-left"><img class="logo" src="images/logo.png" alt="">
-            <ul class="navlogo">
-                <li><img src="images/notification.png"></li>
-                <li><img src="images/inbox.png"></li>
-                <li><img src="images/video.png"></li>
-            </ul>
+        <div class="nav-left">
+            <a href="./Home" style="display: inline-block; width: 160px; height: 32.8px;">
+                <img class="logo" src="images/logo.png" alt="">
+            </a>
         </div>
         <div class="nav-right">
             <div class="search-box">
@@ -41,17 +38,17 @@
                 </form>
             </div>
             <div class="profile-image online" onclick="UserSettingToggle()">
-                <img src="images/profile-pic.png" alt="">
+                <img src=".<%= u.getAvatar()%>" alt="">
             </div>
 
         </div>
         <div class="user-settings">
             <div class="profile-darkButton">
                 <div class="user-profile">
-                    <img src="images/profile-pic.png" alt="">
+                    <img src=".<%= u.getAvatar()%>" alt="">
                     <div>
-                        <p> <%=user_profile.getFirstName()+ " " +user_profile.getLastName()%></p>
-                        <a href="#">See your profile</a>
+                        <p> <%= u.getName()%></p>
+                        <a href="./myprofile?people_name=<%=myUserProfile%>">See your profile</a>
                     </div>
                 </div>
                 <div id="dark-button" onclick="darkModeON()">
@@ -84,7 +81,7 @@
 
             <div class="settings-links">
                 <img src="images/logout.png" alt="" class="settings-icon">
-                <a href="#">Logout <img src="images/arrow.png" alt=""></a>
+                <a href="./Logout">Logout <img src="images/arrow.png" alt=""></a>
             </div>
 
         </div>

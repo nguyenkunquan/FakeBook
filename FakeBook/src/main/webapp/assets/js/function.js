@@ -28,6 +28,33 @@ function validateSearchForm() {
     // Tiếp tục gửi biểu mẫu nếu trường nhập không trống
     return true;
 }
+/* CỦA QUÂN ĐỪNG XÓA NHÉ */
+/*-----------------------*/
+
+document.getElementById('coverImage').addEventListener('click', function () {
+    var form = document.getElementById('postForm-cover');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+});
+document.getElementById('dashboard-img').addEventListener('click', function () {
+    var form = document.getElementById('postForm-avatar');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+});
+document.getElementById('myGender').addEventListener('click', function() {
+    var form = document.getElementById('showFormGender');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+});
+document.getElementById('myBirthday').addEventListener('click', function() {
+    var form = document.getElementById('showFormBirthday');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+});
+document.getElementById('myPhone').addEventListener('click', function() {
+    var form = document.getElementById('showFormPhone');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+});
+document.getElementById('myEmail').addEventListener('click', function() {
+    var form = document.getElementById('showFormEmail');
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+});
 
 function BlurPost(){
 //    var blur = document.getElementById("blur");
@@ -46,3 +73,5 @@ function deletePost(id) {
     // Chuyển hướng người dùng đến trang ./DeleteCustomerController với tham số cusId
     window.location.href = "./deletepost?posId=" + posId;
 }
+/* CỦA QUÂN ĐỪNG XÓA NHÉ */
+/*-----------------------*/
