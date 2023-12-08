@@ -28,3 +28,21 @@ function validateSearchForm() {
     // Tiếp tục gửi biểu mẫu nếu trường nhập không trống
     return true;
 }
+
+function BlurPost(){
+//    var blur = document.getElementById("blur");
+var popup = document.getElementById("popup");
+//   blur.classList.toggle("active");
+popup.classList.toggle("active");
+        var popupElement = document.getElementById("select-post");
+        popupElement.style.display = "none";
+
+};
+
+function deletePost(id) {
+    // Lấy giá trị cusId dựa vào mã nguồn
+    var posId = id; 
+    
+    // Chuyển hướng người dùng đến trang ./DeleteCustomerController với tham số cusId
+    window.location.href = "./deletepost?posId=" + posId;
+}
