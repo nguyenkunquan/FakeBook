@@ -913,6 +913,7 @@ img.coverImage {
     top: 100%;
     display: none;
     min-width: 150px; 
+}
 
 .select-post ul ul li {
     display: block;
