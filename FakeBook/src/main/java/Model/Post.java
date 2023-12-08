@@ -9,33 +9,32 @@ import java.sql.Timestamp;
 
 
 public class Post {
-    private int id;
+    private int id_post;
     private String content;
     private String img;
     private int likeNum;
     private int commentNum;
-    private int idUser;
+    private String user_name;
 
     public Post() {
     }
 
-    public Post(int id, String content, String img, int likeNum, int commentNum, int idUser) {
+    public Post(String content, String img, int likeNum, int commentNum, String user_name) {
         this.content = content;
         this.img = img;
         this.likeNum = likeNum;
         this.commentNum = commentNum;
-        this.idUser = idUser;
+        this.user_name = user_name;
     }
 
+    public int getId_post() {
+        return id_post;
+    }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId_post(int id_post) {
+        this.id_post = id_post;
     }
-    
-    public int getId() {
-        return id;
-    }
-    
+
 
     public String getContent() {
         return content;
@@ -69,13 +68,11 @@ public class Post {
         this.commentNum = commentNum;
     }
 
-    public int getIdUser() {
-        return idUser;
+    public String getUser_name() {
+        return user_name;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
-    
-    
-}
+
