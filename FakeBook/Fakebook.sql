@@ -125,6 +125,7 @@ BEGIN
         WHERE id_post = postId;
     END IF;
 END;
+//
 DELIMITER ;
 DROP TABLE user_account
 DROP TABLE FRIENDSHIP
