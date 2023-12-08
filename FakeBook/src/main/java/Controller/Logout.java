@@ -4,8 +4,6 @@
  */
 package Controller;
 
-import DAO.PostDAO;
-import Service.PostService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -13,13 +11,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author MSI ADMIN
+ * @author ADMIN
  */
-@WebServlet(name = "DeleteLikeController", urlPatterns = {"/deletelike"})
-public class DeleteLikeController extends HttpServlet {
+@WebServlet(name = "Logout", urlPatterns = {"/Logout"})
+public class Logout extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +37,10 @@ public class DeleteLikeController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DeleteLikeController</title>");            
+            out.println("<title>Servlet Logout</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DeleteLikeController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Logout at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,7 +58,19 @@ public class DeleteLikeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+         // Lấy HttpSession từ request, nếu không tồn tại, session sẽ được tạo mới
+        HttpSession session = request.getSession(false); // false để không tạo mới session nếu chưa tồn tại
+        // Kiểm tra session tồn tại trước khi xóa
+        if (session != null) {
+            // Hủy session
+            session.invalidate();
+            // Redirect hoặc thực hiện các hành động sau khi logout thành công
+            response.sendRedirect("./Login"); 
+        } else {
+            // Xử lý khi không tìm thấy session
+            // Ví dụ: thông báo lỗi, đưa về trang chủ, etc.
+            response.sendRedirect("./Home");
+        }
     }
 
     /**
@@ -73,14 +84,7 @@ public class DeleteLikeController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String user_name = (String) request.getSession().getAttribute("User");
-        String pID = request.getParameter("posId");
-        int posID = Integer.parseInt(pID);
-        PostService postService = new PostService();
-        int result = postService.deleteLikeByID(posID, user_name);
-        boolean isLiked = postService.isLiked(posID, user_name);
-        
-        response.sendRedirect("./post?postID=" + posID +"&isLiked=" +isLiked);
+        processRequest(request, response);
     }
 
     /**

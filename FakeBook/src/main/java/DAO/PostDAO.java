@@ -19,13 +19,13 @@ import java.util.List;
 import java.util.Map;
 import utilities.JDBCUtil;
 
-public class PostDAO implements DAOInterface<Post> {
+public class PostDAO {
 
     public static PostDAO getInstance() {
         return new PostDAO();
     }
 
-    @Override
+    //post
     public int insert(Post post) {
         try {
             Connection connection = JDBCUtil.getConnection();
@@ -51,7 +51,6 @@ public class PostDAO implements DAOInterface<Post> {
         return 0;
     }
 
-    @Override
     public int update(Post post) {
         try {
             Connection connection = JDBCUtil.getConnection();
@@ -95,12 +94,33 @@ public class PostDAO implements DAOInterface<Post> {
         }
         return 0;
     }
+    public List<Post> selectPostById(int postId){
+        List<Post> list = new ArrayList<>();
 
-    @Override
-    public int delete(Post t) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            Statement stmt = connection.createStatement();
+            // get data from table 'customer'
+            ResultSet rs = stmt.executeQuery("  select * from post WHERE id_post= " + postId);
+            // map customer data
+            while (rs.next()) {
+                Post post = new Post();
+                post.setId_post(rs.getInt(1));
+                post.setContent(rs.getString(2));
+                post.setImg(rs.getString(3));
+                post.setLikeNum(rs.getInt(4));
+                post.setCommentNum(rs.getInt(5));
+                post.setUser_name(rs.getString(6));
+                post.setCreatedTime(rs.getTimestamp(7));
+                list.add(post);
+                break;
+            }
+            JDBCUtil.closeConnection(connection);
+        } catch (SQLException e) {
+            System.out.println("errror:: " + e.getMessage());
+        }
+        return list;
     }
-
     public List<Map<String, Object>> selectAllPost() {
         List<Map<String, Object>> list = new ArrayList<>();
         try {
@@ -119,6 +139,8 @@ public class PostDAO implements DAOInterface<Post> {
                 rowMap.put("user_name", rs.getString(6));
                 rowMap.put("createdTime", rs.getDate(7));
                 rowMap.put("id_user", rs.getString(8));
+                rowMap.put("first_name", rs.getString(15));
+                rowMap.put("last_name", rs.getString(16));
                 rowMap.put("avatar", rs.getString(17));
                 list.add(rowMap);
             }
@@ -127,16 +149,6 @@ public class PostDAO implements DAOInterface<Post> {
             System.out.println("errror:: " + e.getMessage());
         }
         return list;
-    }
-
-    @Override
-    public Post selectById(Post t) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List<Post> selectAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     public int deleteByID(int id) {
@@ -162,7 +174,8 @@ public class PostDAO implements DAOInterface<Post> {
 
     }
 
-    public int updateLikeByID(int id_post, String user_name) {
+    //like
+    public int insertLikeByID(int id_post, String user_name) {
         try {
             Connection connection = JDBCUtil.getConnection();
             String insertQuery = "INSERT INTO LIKE_status (id_post,user_name)"
@@ -227,7 +240,7 @@ public class PostDAO implements DAOInterface<Post> {
         }
         return list;
     }
-    
+
     public List<Like> selectAllLikeByID(int postID) {
         List<Like> list = new ArrayList<>();
 
@@ -249,13 +262,7 @@ public class PostDAO implements DAOInterface<Post> {
         }
         return list;
     }
-    public boolean isLiked(int postID, String user_name){
-        List<Like> listUser = selectLikeByID(postID,  user_name);
-        
-        return listUser.size()==1? true : false;
-        
-    }
-    
+    //comment
     public int insertComment(int id_post, String user_name, String content) {
         try {
             Connection connection = JDBCUtil.getConnection();
@@ -277,7 +284,6 @@ public class PostDAO implements DAOInterface<Post> {
         }
         return 0;
     }
-    
     public int deleteComment(int id_comment) {
         try {
             Connection connection = JDBCUtil.getConnection();
@@ -296,7 +302,6 @@ public class PostDAO implements DAOInterface<Post> {
         }
         return 0;
     }
-    
     public List<Comment> selectAllComment(int id_post){
         List<Comment> list = new ArrayList<>();
 
@@ -321,16 +326,4 @@ public class PostDAO implements DAOInterface<Post> {
         }
         return list;
     }
-    
-    public Map<Comment, User> selectUserComment(int id_post){
-        Map<Comment, User> list = new HashMap<>();
-        List<Comment> list1 = selectAllComment(id_post);
-        UserDAO userDAO = new UserDAO();
-        for (Comment comment : list1) {
-            User user = userDAO.selectByUserName(comment.getUserName());
-            list.put(comment, user);
-        }
-        return list;
-    }
-    
 }

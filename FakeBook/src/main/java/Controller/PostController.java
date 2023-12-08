@@ -73,27 +73,35 @@ public class PostController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String user_name = (String) request.getSession().getAttribute("User");
-        int postID = Integer.parseInt(request.getParameter("postID"));
-        boolean isLiked = Boolean.parseBoolean(request.getParameter("isLiked"));
-        PostDAO postDao = new PostDAO();
-        List<Map<String, Object>> posts = (List<Map<String, Object>>) postDao.selectAllPost();
-        Map<Comment, User> listComment = postDao.selectUserComment(postID);
-        
-        
-        for (Map<String, Object> post : posts) {
-            int name_post = (int) post.get("id_post");
-            if (name_post == postID) {
-                request.setAttribute("post", post);
-                request.setAttribute("id_post", postID);
-                break;
-            }
+        String postIDStr = (String) request.getParameter("postID");
+        int postID = postIDStr != null ? Integer.parseInt(postIDStr) : 0;
+        PostService postService = new PostService();
+        boolean isExist = postService.isExist(postID);
+        System.out.println(isExist);
+        if (isExist) {
+            String user_name = (String) request.getSession().getAttribute("User");
+            boolean isLiked = Boolean.parseBoolean(request.getParameter("isLiked"));
+            List<Map<String, Object>> posts = (List<Map<String, Object>>) postService.selectAllPost();
+            Map<Comment, User> listComment = postService.selectUserComment(postID);
 
+            for (Map<String, Object> post : posts) {
+                int name_post = (int) post.get("id_post");
+                if (name_post == postID) {
+                    request.setAttribute("post", post);
+                    request.setAttribute("id_post", postID);
+                    break;
+                }
+
+            }
+            request.setAttribute("isExist", isExist);
+            request.setAttribute("listComment", listComment);
+            request.setAttribute("isLiked", isLiked);
+            request.setAttribute("user_name", user_name);
+
+        }else{
+            request.setAttribute("isExist", isExist);
         }
         
-        request.setAttribute("listComment", listComment);
-        request.setAttribute("isLiked", isLiked);
-        request.setAttribute("user_name", user_name);
         request.getRequestDispatcher("/views/Home/post.jsp").forward(request, response);
     }
 
@@ -108,34 +116,36 @@ public class PostController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
         String content = request.getParameter("content");
-        try{
-        Part avatarPart = request.getPart("postAvatar");
-        String folderUpload = "/files";
-        String pathUploadFolder = request.getServletContext().getRealPath(folderUpload);
-        String fileName = Paths.get(avatarPart.getSubmittedFileName()).getFileName().toString();
-//        // check pathUploadFolder tồn tại hay chưa.
-//        if (!Files.exists(Paths.get(pathUploadFolder))) {
-//            Files.createDirectories(Paths.get(pathUploadFolder));
-//        }
-        String urlAvatar = pathUploadFolder + "/" + fileName;
-        avatarPart.write(urlAvatar);
-        String avatarInsert = folderUpload + "/" + fileName;
-              String user_name = (String) request.getSession().getAttribute("User");
-        Post post = new Post(content, avatarInsert, 0, 0, user_name);
+        String user_name = (String) request.getSession().getAttribute("User");
+        try {
+            Part avatarPart = request.getPart("postAvatar");
+            String folderUpload = "/files";
+            String pathUploadFolder = request.getServletContext().getRealPath(folderUpload);
+            String fileName = Paths.get(avatarPart.getSubmittedFileName()).getFileName().toString();
+            // check pathUploadFolder tồn tại hay chưa.
+            if (!Files.exists(Paths.get(pathUploadFolder))) {
+                Files.createDirectories(Paths.get(pathUploadFolder));
+            }
+            String urlAvatar = pathUploadFolder + "/" + fileName;
+            avatarPart.write(urlAvatar);
+            String avatarInsert = folderUpload + "/" + fileName;
+//            String user_name = (String) request.getSession().getAttribute("User");
+            Post post = new Post(content, avatarInsert, 0, 0, user_name);
 
-        PostDAO postDao = new PostDAO();
-        int result = postDao.insert(post);
-        if (result > 0) {
-            response.sendRedirect("./home");
-            return;
-        }
-        response.sendRedirect("./post");
-        }catch (Exception E) {
-        
-         response.sendRedirect("./home");
-        
+            PostService postService = new PostService();
+            int result = postService.insertPost(post);
+            if (result > 0) {
+                response.sendRedirect("./Home");
+                return;
+            }
+            response.sendRedirect("./post");
+        } catch (Exception E) {
+            Post post = new Post(content, "", 0, 0, user_name);
+            PostService postService = new PostService();
+            int result = postService.insertPost(post);
+            response.sendRedirect("./Home");
+
         }
 
     }

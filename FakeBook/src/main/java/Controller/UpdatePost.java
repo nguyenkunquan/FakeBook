@@ -23,7 +23,6 @@ import javax.servlet.http.Part;
  *
  * @author MSI ADMIN
  */
-
 @MultipartConfig
 @WebServlet(name = "UpdatePost", urlPatterns = {"/updatepost"})
 public class UpdatePost extends HttpServlet {
@@ -45,7 +44,7 @@ public class UpdatePost extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UpdatePost</title>");            
+            out.println("<title>Servlet UpdatePost</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet UpdatePost at " + request.getContextPath() + "</h1>");
@@ -80,37 +79,35 @@ public class UpdatePost extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-               HttpSession session = request.getSession();
-               String pID = request.getParameter("posId");
-               int posID = Integer.parseInt(pID);
+        String pID = request.getParameter("posId");
+        int posID = Integer.parseInt(pID);
         String content = request.getParameter("content");
         System.out.println(content);
         System.out.println(posID);
-        try{
-        Part avatarPart = request.getPart("postAvatar");
-        // String folderUpload = "/files";
-        // String pathUploadFolder = request.getServletContext().getRealPath(folderUpload);
-        // String fileName = Paths.get(avatarPart.getSubmittedFileName()).getFileName().toString();
-        // check pathUploadFolder tồn tại hay chưa.
-        if (!Files.exists(Paths.get(pathUploadFolder))) {
-            Files.createDirectories(Paths.get(pathUploadFolder));
-        }
-        String urlAvatar = pathUploadFolder + "/" + fileName;
-        avatarPart.write(urlAvatar);
-        String avatarInsert = folderUpload + "/" + fileName;
-        
+        try {
+            Part avatarPart = request.getPart("postAvatar");
+            String folderUpload = "/files";
+            String pathUploadFolder = request.getServletContext().getRealPath(folderUpload);
+            String fileName = Paths.get(avatarPart.getSubmittedFileName()).getFileName().toString();
+            // check pathUploadFolder tồn tại hay chưa.
+            if (!Files.exists(Paths.get(pathUploadFolder))) {
+                Files.createDirectories(Paths.get(pathUploadFolder));
+            }
+            String urlAvatar = pathUploadFolder + "/" + fileName;
+            avatarPart.write(urlAvatar);
+            String avatarInsert = folderUpload + "/" + fileName;
 
-        PostDAO postDao = new PostDAO();
-        int result = postDao.updateByID(content, avatarInsert, posID);
-        if (result > 0) {
-            response.sendRedirect("./home");
-            return;
-        }
-        response.sendRedirect("./post");
-        }catch (Exception E) {
-        
-         response.sendRedirect("./home");
-        
+            PostDAO postDao = new PostDAO();
+            int result = postDao.updateByID(content, avatarInsert, posID);
+            if (result > 0) {
+                response.sendRedirect("./Home");
+                return;
+            }
+            response.sendRedirect("./post");
+        } catch (Exception E) {
+
+            response.sendRedirect("./Home");
+
         }
     }
 

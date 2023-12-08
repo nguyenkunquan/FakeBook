@@ -6,18 +6,26 @@ package Service;
 
 import DAO.UserDAO;
 import Model.User;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 public class FriendListService {
+
     private UserDAO userDAO;
 
     public FriendListService() {
         this.userDAO = UserDAO.getInstance();
     }
-        public List<User> getFriendList(String user_name){
-        List<User> list = null;
-        list = userDAO.getFriendList(new User(null, user_name, null, null, null, null, null, null, null, null, null));
+
+    public Map<User, Integer> getFriendList(String user_name) {
+        Map<User, Integer> list = new HashMap<>();
+        List<User> list1 = null;
+        list1 = userDAO.getFriendList(user_name);
+        for (User user : list1) {
+            List<User> list2 = userDAO.getFriendList(user.getUsername());
+            list.put(user, list2.size());
+        }
         return list;
     }
 

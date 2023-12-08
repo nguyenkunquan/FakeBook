@@ -16,13 +16,12 @@ import java.util.List;
 import java.util.Map;
 import utilities.JDBCUtil;
 
-public class UserDAO implements DAOInterface<User> {
+public class UserDAO {
 
     public static UserDAO getInstance() {
         return new UserDAO();
     }
 
-    @Override
     public int insert(User user) {
         try {
             Connection connection = JDBCUtil.getConnection();
@@ -53,7 +52,6 @@ public class UserDAO implements DAOInterface<User> {
         return 0;
     }
 
-    @Override
     public int update(User user) {
         try {
             Connection connection = JDBCUtil.getConnection();
@@ -112,7 +110,6 @@ public class UserDAO implements DAOInterface<User> {
         return 0;
     }
 
-    @Override
     public List<User> selectAll() {
         List<User> list = new ArrayList<>();
         try {
@@ -175,14 +172,58 @@ public class UserDAO implements DAOInterface<User> {
         return result;
     }
 
-    public List<User> selectAllByName(String name) {
+    public int updateMyProfile(String userName, String avatarImage, String coverImage) {
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String updateQuery = "UPDATE user_account t SET t.avatar = ?, t.background = ? WHERE t.user_name = ?";
+            // Tạo PreparedStatement
+            PreparedStatement preparedStatement;
+            preparedStatement = connection.prepareStatement(updateQuery);
+            // Thiết lập các tham số trong truy vấn
+            preparedStatement.setString(1, avatarImage);
+            preparedStatement.setString(2, coverImage);
+            preparedStatement.setString(3, userName);
+
+            // Thực hiện update
+            int rowsUpdated = preparedStatement.executeUpdate();
+            return rowsUpdated;
+        } catch (SQLException ex) {
+            System.out.println("error: " + ex.getMessage());
+        }
+        return 0;
+    }
+    
+    public int updateMyProfile(String userName, String gender, Date birthDay, String phone, String email) {
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String updateQuery = "UPDATE user_account t SET t.gender = ?, t.birthday = ?, t.phone = ?, t.email = ? WHERE t.user_name = ?";
+            // Tạo PreparedStatement
+            PreparedStatement preparedStatement;
+            preparedStatement = connection.prepareStatement(updateQuery);
+            // Thiết lập các tham số trong truy vấn
+            preparedStatement.setString(1, gender);
+            preparedStatement.setDate(2, birthDay);
+            preparedStatement.setString(3, phone);
+            preparedStatement.setString(4, email);
+            preparedStatement.setString(5,userName);
+
+            // Thực hiện update
+            int rowsUpdated = preparedStatement.executeUpdate();
+            return rowsUpdated;
+        } catch (SQLException ex) {
+            System.out.println("error: " + ex.getMessage());
+        }
+        return 0;
+    }
+
+    public List<User> selectAllByName(String user_name, String name) {
         List<User> list = new ArrayList<>();
         try {
             Connection connection = JDBCUtil.getConnection();
             Statement stmt = connection.createStatement();
             // get data from table 'customer'
-            ResultSet rs = stmt.executeQuery("select * from USER_Account where first_Name LIKE " + "'%" + name + "%'"
-                    + " or last_Name LIKE " + "'%" + name + "%'");
+            ResultSet rs = stmt.executeQuery("select * from USER_Account where (first_Name LIKE " + "'%" + name + "%'"
+                    + " or last_Name LIKE " + "'%" + name + "%'" + ") AND user_name <> " + "'" + user_name + "'");
 
             // map customer data
             while (rs.next()) {
@@ -207,21 +248,21 @@ public class UserDAO implements DAOInterface<User> {
         return list;
     }
 
-    public List<User> getFriendList(User u) {
+    public List<User> getFriendList(String user_name) {
         List<User> list = new ArrayList<>();
         try {
             Connection connection = JDBCUtil.getConnection();
             Statement stmt = connection.createStatement();
             // get data from table 'customer'
-            ResultSet rs = stmt.executeQuery("SELECT ua.id_user, ua.user_name, ua.first_Name, ua.last_Name, ua.avatar"
-                    + "FROM user_account ua"
-                    + "JOIN friendship f ON (ua.user_name = f.user_name_2 OR ua.user_name = f.user_name_1)"
-                    + "WHERE (f.user_name_1 = " + "'" + u.getUsername() + "'" + " OR f.user_name_2 = " + "'" + u.getUsername() + "'" + ") AND ua.user_name <>" + "'" + u.getUsername() + "'");
+            ResultSet rs = stmt.executeQuery("SELECT ua.* "
+                    + "FROM user_account ua "
+                    + "JOIN friendship f ON (ua.user_name = f.user_name_2 OR ua.user_name = f.user_name_1) "
+                    + "WHERE (f.user_name_1 = " + "'" + user_name + "'" + " OR f.user_name_2 = " + "'" + user_name + "'" + ") AND ua.user_name <>" + "'" + user_name + "'");
             // map customer data
             while (rs.next()) {
                 User user = new User();
                 user.setId(rs.getString(1));
-                user.setUsername(null);
+                user.setUsername(rs.getString(2));
                 user.setPassword(null);
                 user.setGender(rs.getString(4));
                 user.setBirthday(rs.getDate(5));
@@ -232,7 +273,6 @@ public class UserDAO implements DAOInterface<User> {
                 user.setAvatar(rs.getString(10));
                 user.setBackground(rs.getString(11));
                 list.add(user);
-                break;
             }
             JDBCUtil.closeConnection(connection);
         } catch (SQLException e) {
@@ -240,7 +280,8 @@ public class UserDAO implements DAOInterface<User> {
         }
         return list;
     }
-    public int addFriend(String user_name, String people_name){
+
+    public int addFriend(String user_name, String people_name) {
         try {
             Connection connection = JDBCUtil.getConnection();
             String insertQuery = "INSERT INTO FRIENDSHIP (user_name_1, user_name_2)"
@@ -260,15 +301,4 @@ public class UserDAO implements DAOInterface<User> {
         }
         return 0;
     }
-    
-    @Override
-    public User selectById(User t) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public int delete(User t) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
 }

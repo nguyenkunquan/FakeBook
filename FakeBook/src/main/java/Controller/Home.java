@@ -1,11 +1,12 @@
-    /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package Controller;
 
 import DAO.PostDAO;
-import DAO.UserDAO;
+import Service.FriendListService;
+import Service.PostService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -14,13 +15,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author MSI ADMIN
  */
-@WebServlet(name = "Home", urlPatterns = {"/home"})
+@WebServlet(name = "Home", urlPatterns = {"/Home"})
 public class Home extends HttpServlet {
 
     /**
@@ -40,7 +40,7 @@ public class Home extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Home</title>");
+            out.println("<title>Servlet Home</title>");            
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Home at " + request.getContextPath() + "</h1>");
@@ -61,18 +61,17 @@ public class Home extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        
-        if (session != null) {
-            String user_name = (String) session.getAttribute("User");
-            UserDAO user = new UserDAO();
-            PostDAO postDao = new PostDAO();
-            request.setAttribute("listPos", postDao.selectAllPost());
-            request.getSession().setAttribute("user_name_pro", user.selectByUserName(user_name));
-            RequestDispatcher rd = request.getRequestDispatcher("/views/Home/home.jsp");
-            rd.forward(request, response);
-        }
+        String myUserProfile = (String) request.getSession().getAttribute("User");
+        PostService postService = new PostService();
+        request.setAttribute("listPos", postService.selectAllPost());
+        FriendListService friendListService = new FriendListService();
+        request.setAttribute("listFriend", friendListService.getFriendList(myUserProfile));
+
+        RequestDispatcher rd = request.getRequestDispatcher("/views/Home/home.jsp");
+        rd.forward(request, response);
     }
+
+  
 
     /**
      * Handles the HTTP <code>POST</code> method.

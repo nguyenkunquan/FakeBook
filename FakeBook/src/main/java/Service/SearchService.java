@@ -28,9 +28,9 @@ public class SearchService {
     
     public Map<User, Boolean> getAllUserByName(String user_name, String peole_name){
         Map<User, Boolean> list = new HashMap<>();
-        List<User> list1 = userDAO.selectAllByName(peole_name);
+        List<User> list1 = userDAO.selectAllByName(user_name, peole_name);
         for (User user : list1) {
-            if (isFriend(user.getUsername(), peole_name)) {
+            if (isFriend(user_name, user.getUsername())) {
                 list.put(user, true);
             }else {
                 list.put(user, false);
@@ -39,7 +39,7 @@ public class SearchService {
         return list;
     }
     public boolean isFriend(String user_name, String friend_name){
-        List<User> list = userDAO.getFriendList(new User(null, user_name, null, null, null, null, null, null, null, null, null));
+        List<User> list = userDAO.getFriendList(user_name);
         for (User user : list) {
             if (user.getUsername().equals(friend_name)) {
                 return true;

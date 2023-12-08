@@ -5,6 +5,7 @@
 package Controller;
 
 import DAO.PostDAO;
+import Service.PostService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -37,7 +38,7 @@ public class DeletePost extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DeletePost</title>");            
+            out.println("<title>Servlet DeletePost</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet DeletePost at " + request.getContextPath() + "</h1>");
@@ -58,17 +59,20 @@ public class DeletePost extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try{
-               String pID = request.getParameter("posId");
-               int posID = Integer.parseInt(pID);
-                PostDAO postDao = new PostDAO();
-        int result = postDao.deleteByID(posID);
-        }catch(Exception e){
-
-    
+        String pID = request.getParameter("posId");
+        int posID = Integer.parseInt(pID);
+        try {
+            PostService postService = new PostService();
+            int result = postService.deletePost(posID);
+            if (result == 0) {
+                response.sendError(404);
+                return;
+            }
+        } catch (Exception e) {
+            
         }
-                response.sendRedirect("./home");
-    
+        response.sendRedirect("./post?postID="+posID);
+
     }
 
     /**

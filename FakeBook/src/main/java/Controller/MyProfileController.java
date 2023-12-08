@@ -5,7 +5,9 @@
 package Controller;
 
 import Model.User;
+import Service.FriendListService;
 import Service.MyProfileService;
+import Service.SearchService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -64,8 +66,22 @@ public class MyProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        User user = new MyProfileService().getMyProfileByUserName("quan");
+        //String myAccount = user_name tài khoản đang đăng nhập lấy từ session
+        String myAccount = (String) request.getSession().getAttribute("User");
+        User user = new MyProfileService().getMyProfileByUserName(request.getParameter("people_name")); //thay "quan" = request.getParameter("people_name")
+        SearchService searchService = new SearchService();
+        FriendListService friendListService = new FriendListService();
+        
+        request.setAttribute("myAccount", myAccount);
         request.setAttribute("user", user);
+        if (!user.getUsername().equals(myAccount)) {
+            request.setAttribute("isFriend", searchService.isFriend(myAccount, user.getUsername()));
+            request.setAttribute("listFriend", friendListService.getFriendList(user.getUsername()));
+        }else{
+            request.setAttribute("isFriend", false);
+            request.setAttribute("listFriend", friendListService.getFriendList(myAccount));
+        }
+        
         request.getRequestDispatcher("views/MyProfile/myprofile.jsp").forward(request, response);
     }
 
@@ -80,8 +96,9 @@ public class MyProfileController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String myAccount = (String) request.getSession().getAttribute("User");
         MyProfileService myProfileService = new MyProfileService();
-        
+
         if (request.getPart("cusCover") != null) {
             Part coverPart = request.getPart("cusCover");
             String folderUpload = "/files";
@@ -96,8 +113,8 @@ public class MyProfileController extends HttpServlet {
 
             // build model customer
             String coverInsert = folderUpload + "/" + fileName;
-            
-            myProfileService.updateMyProfile("quan", myProfileService.getMyProfileByUserName("quan").getAvatar(), coverInsert);
+
+            myProfileService.updateMyProfile(myAccount, myProfileService.getMyProfileByUserName(myAccount).getAvatar(), coverInsert);
         }
 
         if (request.getPart("cusAvatar") != null) {
@@ -115,15 +132,15 @@ public class MyProfileController extends HttpServlet {
             // build model customer
             String avatarInsert = folderUpload + "/" + fileName;
 
-            myProfileService.updateMyProfile("quan", avatarInsert, myProfileService.getMyProfileByUserName("quan").getBackground());
+            myProfileService.updateMyProfile(myAccount, avatarInsert, myProfileService.getMyProfileByUserName(myAccount).getBackground());
         }
-        
-        if(request.getParameter("content")!= null ||request.getPart("cusAvatar") != null) {
-            
+
+        if (request.getParameter("content") != null || request.getPart("cusAvatar") != null) {
+
             //COPY CODE TỪ PostController vào đây
         }
-        
-        response.sendRedirect("./myprofile");
+
+        response.sendRedirect("./myprofile?people_name="+myAccount);
     }
 
     /**

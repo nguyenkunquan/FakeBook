@@ -6,6 +6,7 @@ package Controller;
 
 import DAO.PostDAO;
 import Model.Like;
+import Service.PostService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -82,9 +83,9 @@ public class LikeController extends HttpServlet {
         String user_name = (String) request.getSession().getAttribute("User");
         String pID = request.getParameter("posId");
         int posID = Integer.parseInt(pID);
-        PostDAO postDao = new PostDAO();
-        int result = postDao.updateLikeByID(posID, user_name);
-        boolean isLiked = postDao.isLiked(posID, user_name);
+        PostService postService = new PostService();
+        int result = postService.insertLike(posID, user_name);
+        boolean isLiked = postService.isLiked(posID, user_name);
         
         response.sendRedirect("./post?postID=" + posID +"&isLiked=" +isLiked);
         }

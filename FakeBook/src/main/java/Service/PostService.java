@@ -1,66 +1,89 @@
 package Service;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-
+import DAO.PostDAO;
+import DAO.UserDAO;
+import Model.Comment;
+import Model.Like;
+import Model.Post;
+import Model.User;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PostService {
-
-    //connect to db => done
-    //query to db get data
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/blog";
-    private static final String USER_NAME = "root";
-    private static final String PASSWORD = "123456";
-    public Connection connection = null;
-
+    
+    private PostDAO postDao;
+    private UserDAO userDao;
+    
     public PostService() {
-        this.connection = getConnection(DB_URL, USER_NAME, PASSWORD);
+        this.postDao = PostDAO.getInstance();
+        this.userDao = UserDAO.getInstance();
+    }
+    //post
+    public int insertPost(Post post) {
+        return postDao.insert(post);
+    }
+    public int deletePost(int id){
+        return postDao.deleteByID(id);
+    }
+    public int updateByID(String content, String img, int posID) {
+        return postDao.updateByID(content, img, posID);
+    }
+    public List<Map<String, Object>> selectAllPost() {
+        List<Map<String, Object>> list = new ArrayList<>();
+        list = postDao.selectAllPost();
+        return list;
+    }
+    public boolean isExist(int postID){
+        List<Post> list = postDao.selectPostById(postID);
+        
+        return list.size()==1?true:false;
     }
 
-    /**
-     * get connection to mySql
-     *
-     * @param urlDBString
-     * @param username
-     * @param password
-     * @return
-     */
-    private Connection getConnection(String urlDBString, String username, String password) {
-        Connection conn = null;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(urlDBString,
-                    username, password);
-            System.out.println("connect to DB success!!");
-        } catch (ClassNotFoundException | SQLException exception) {
-            System.out.println("can't connect to database!!!" + exception.getMessage());
-        }
-
-        return conn;
+    //like
+    public int insertLike(int id_post, String user_name) {
+        return postDao.insertLikeByID(id_post, user_name);
     }
-        public int insertPost(int id, String content, String img , int likeNum, int commentNum, int idUser) {
-        try {
-            String insertQuery = "INSERT INTO POST (id_post, content, img, like_num, comment_num, user_name) VALUES (?, ?, ?, ?, ?, ?)";
-            // Tạo PreparedStatement
-            PreparedStatement preparedStatement;
-            preparedStatement = connection.prepareStatement(insertQuery);
-            // Thiết lập các tham số trong truy vấn
-            preparedStatement.setInt(1, id);
-            preparedStatement.setString(2, content);
-            preparedStatement.setString(3,img);
-            preparedStatement.setInt(4, likeNum);
-            preparedStatement.setInt(5, commentNum);
-            preparedStatement.setInt(6, idUser);
 
-            // Thực hiện INSERT
-            int rowsInserted = preparedStatement.executeUpdate();
-            return rowsInserted;
-        } catch (SQLException ex) {
-            System.out.println("error: " + ex.getMessage());
+    public int deleteLikeByID(int id_post, String user_name) {
+        return postDao.deleteLikeByID(id_post, user_name);
+    }
+
+    public List<Like> selectLikeByID(int postID, String user_name) {
+        List<Like> list = new ArrayList<>();
+        list = postDao.selectLikeByID(postID, user_name);
+        return list;
+    }
+    public boolean isLiked(int postID, String user_name){
+        List<Like> listUser = selectLikeByID(postID,  user_name);
+        
+        return listUser.size()==1? true : false;
+        
+    }
+
+    //comment
+    public int insertComment(int id_post, String user_name, String content) {
+        return postDao.insertComment(id_post, user_name, content);
+    }
+
+    public int deleteComment(int id_comment) {
+        return postDao.deleteComment(id_comment);
+    }
+
+    public List<Comment> selectAllComment(int id_post) {
+        List<Comment> list = new ArrayList<>();
+        list = postDao.selectAllComment(id_post);
+        return list;
+    }
+    
+    public Map<Comment, User> selectUserComment(int id_post) {
+        Map<Comment, User> list = new HashMap<>();
+        List<Comment> list1 = postDao.selectAllComment(id_post);
+        for (Comment comment : list1) {
+            User user = userDao.selectByUserName(comment.getUserName());
+            list.put(comment, user);
         }
-        return 0;
+        return list;
     }
 }

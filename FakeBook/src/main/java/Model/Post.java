@@ -15,6 +15,7 @@ public class Post {
     private int likeNum;
     private int commentNum;
     private String user_name;
+    private Timestamp createdTime;
 
     public Post() {
     }
@@ -34,7 +35,6 @@ public class Post {
     public void setId_post(int id_post) {
         this.id_post = id_post;
     }
-
 
     public String getContent() {
         return content;
@@ -75,5 +75,16 @@ public class Post {
     public void setUser_name(String user_name) {
         this.user_name = user_name;
     }
-}
 
+    public Timestamp getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Timestamp createdTime) {
+        this.createdTime = createdTime;
+    }
+    
+    
+    
+    
+}

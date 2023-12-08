@@ -5,6 +5,7 @@
 package Controller;
 
 import DAO.PostDAO;
+import Service.PostService;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -60,8 +61,8 @@ public class DeleteCommentController extends HttpServlet {
             throws ServletException, IOException {
         int commentId = Integer.parseInt(request.getParameter("commentId"));
         String postID = request.getParameter("postID");
-        PostDAO postDao = new PostDAO();
-        int result = postDao.deleteComment(commentId);
+        PostService postService = new PostService();
+        int result = postService.deleteComment(commentId);
         
         response.sendRedirect("./post?postID=" + postID);
     }

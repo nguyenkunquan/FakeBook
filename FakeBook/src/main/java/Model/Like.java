@@ -6,11 +6,12 @@ package Model;
 
 /**
  *
- * @author MSI ADMIN
+ * @author ADMIN
  */
 public class Like {
-        private String user_name;
-        private String postID;
+
+    private String user_name;
+    private String postID;
 
     public Like() {
     }
@@ -35,6 +36,4 @@ public class Like {
     public void setPostID(String postID) {
         this.postID = postID;
     }
-        
-    
 }

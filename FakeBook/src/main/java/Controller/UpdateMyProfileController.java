@@ -4,10 +4,11 @@
  */
 package Controller;
 
-import DAO.PostDAO;
-import Service.PostService;
+import Model.User;
+import Service.MyProfileService;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,10 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author MSI ADMIN
+ * @author acer
  */
-@WebServlet(name = "DeleteLikeController", urlPatterns = {"/deletelike"})
-public class DeleteLikeController extends HttpServlet {
+@WebServlet(name = "UpdateMyProfileController", urlPatterns = {"/updatemyprofile"})
+public class UpdateMyProfileController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +39,10 @@ public class DeleteLikeController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DeleteLikeController</title>");            
+            out.println("<title>Servlet UpdateMyProfileController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DeleteLikeController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UpdateMyProfileController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -73,14 +74,35 @@ public class DeleteLikeController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String user_name = (String) request.getSession().getAttribute("User");
-        String pID = request.getParameter("posId");
-        int posID = Integer.parseInt(pID);
-        PostService postService = new PostService();
-        int result = postService.deleteLikeByID(posID, user_name);
-        boolean isLiked = postService.isLiked(posID, user_name);
-        
-        response.sendRedirect("./post?postID=" + posID +"&isLiked=" +isLiked);
+        User user = new MyProfileService().getMyProfileByUserName((String) request.getSession().getAttribute("User"));
+        //User user = new MyProfileService().getMyProfileByUserName("quan"); //for testing
+        MyProfileService myProfileService = new MyProfileService();
+
+        String newGender = request.getParameter("newGender");
+        String newPhone = request.getParameter("newPhone");
+        String newEmail = request.getParameter("newEmail");
+
+        if (newGender != null) {
+            myProfileService.updateMyProfile(user.getUsername(), newGender, user.getBirthday(), user.getPhone(), user.getEmail());
+        }
+        try {
+            String newDay = request.getParameter("newDay");
+            String newMonth = request.getParameter("newMonth");
+            String newYear = request.getParameter("newYear");
+            String newBirthday = newYear + "-" + newMonth + "-" + newDay;
+            System.out.println(newBirthday);
+            Date dateOfBirth = Date.valueOf(newBirthday);
+            myProfileService.updateMyProfile(user.getUsername(), user.getGender(), dateOfBirth, user.getPhone(), user.getEmail());
+        } catch (Exception e) {
+           
+        }
+        if (newPhone != null) {
+            myProfileService.updateMyProfile(user.getUsername(), user.getGender(), user.getBirthday(), newPhone, user.getEmail());
+        }
+        if (newEmail != null) {
+            myProfileService.updateMyProfile(user.getUsername(), user.getGender(), user.getBirthday(), user.getPhone(), newEmail);
+        }
+        response.sendRedirect("./myprofile?people_name="+user.getUsername());
     }
 
     /**
