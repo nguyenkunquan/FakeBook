@@ -6,7 +6,12 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
+
+    <%@page import="Model.User"%>
+    <%@page import="javax.servlet.http.HttpSession"%>
     String search = request.getAttribute("search_name") != null ? (String)request.getAttribute("search_name") : null;
+    User user_profile = (User) request.getSession().getAttribute("user_name_pro");
+
 %>
 <!DOCTYPE html>
 <html>
@@ -44,7 +49,7 @@
                 <div class="user-profile">
                     <img src="images/profile-pic.png" alt="">
                     <div>
-                        <p> Alex Carry</p>
+                        <p> <%=user_profile.getFirstName()+ " " +user_profile.getLastName()%></p>
                         <a href="#">See your profile</a>
                     </div>
                 </div>
