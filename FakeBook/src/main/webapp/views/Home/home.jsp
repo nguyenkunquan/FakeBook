@@ -5,6 +5,19 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@page import="java.util.List"%>
+<%@page import="Model.Post"%>
+<%@page import="DAO.PostDAO"%>
+<%@page import= "java.util.Map"%>
+<%@ page import="java.util.Date" %>
+<%@page import="Model.User"%>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@page import="javax.servlet.http.HttpSession"%>
+<%
+    List<Map<String, Object>> posts = (List<Map<String, Object>>) request.getAttribute("listPos");
+    User user_profile_1 = (User) request.getSession().getAttribute("user_name_pro");
+%>
 <!DOCTYPE html>
 <html lang="en">
     
@@ -39,14 +52,14 @@
                 <div class="user-profile">
                     <img src="images/profile-pic.png" alt="">
                     <div>
-                        <p> Alex Carry</p>
+                        <p><%=user_profile_1.getFirstName() + " " + user_profile_1.getLastName()%></p>
                         <small>Public <i class="fas fa-caret-down"></i></small>
                     </div>
                 </div>
 
                 <div class="post-upload-textarea">
                     <form action="./post" method="POST" enctype="multipart/form-data">
-                    <textarea name="content" placeholder="What's on your mind, Alex?" id="" cols="30" rows="3"></textarea>
+                    <textarea name="content" placeholder="What's on your mind,<%=user_profile_1.getLastName()%>?" id="" cols="30" rows="3"></textarea>
                     
                     <div class="add-post-links">
                             <input class="form-control" name="cusAvatar" type="file" id="formFile">
@@ -56,130 +69,90 @@
                 </div>
             </div>
 
-            <div class="status-field-container write-post-container">
-                <div class="user-profile-box">
-                    <div class="user-profile">
-                        <img src="images/profile-pic.png" alt="">
-                        <div>
-                            <p> Alex Carry</p>
-                            <small>August 13 1999, 09.18 pm</small>
+               <% if (posts != null) { %>
+                <% for (Map<String, Object> post : posts) {
+                        PostDAO postDao = new PostDAO();
+                        String postStr = String.valueOf(post.get("id_post"));
+                        int postID = Integer.parseInt(postStr);
+                        boolean isLiked = postDao.isLiked(postID, user_profile_1.getUsername());
+                        //             boolean isLiked = true;
+%>
+                <div class="total1" id="blur">
+                    <div class="status-field-container write-post-container" >               
+                        <div class="user-profile-box">
+                            <div class="user-profile">
+                                <img src=".<%=post.get("avatar")%>" alt="">
+                                <div>
+                                    <p><%=post.get("user_name")%></p>
+                                    <small><%=post.get("createdTime")%></small>
+                                </div>
+                            </div>
+                            <%String user_name_per = (String) post.get("user_name");
+                                String user_name_session = (String) user_profile_1.getUsername();
+                                if (user_name_per.matches(user_name_session)) {
+                            %>
+
+                            <div class="select-post" id="select-post"><!--   <a href="#"><i class="fas fa-ellipsis-v"></i></a> -->    
+                                <ul>
+                                    <li>
+                                        <a ><i class="fas fa-ellipsis-v"></i></a>
+                                        <ul>
+                                            <li><a onclick="BlurPost()"><i class="fas fa-edit"></i></a></li>
+                                            <li><a onclick="deletePost(<%=post.get("id_post")%>)"><img src="images/icons8-trash-can-50.png" alt="alt"/></a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+
+
+
+
+                            <%     }%>
+                        </div>
+
+                        <div class="status-field">
+                            <p><%=post.get("content")%> </p>
+                            <img src=".<%=post.get("img")%>" alt="card image cap">
+
+                        </div>
+                        <div class="post-reaction">
+                            <div class="activity-icons">
+                                <div>       
+                                    <form id="likeForm" action="" method="POST">
+
+                                        <button id="likeButton" name="posId" > <img  src=<%=isLiked ? "images/like-blue.png" : "images/like.png"%>><%=post.get("like_num")%></button>
+                                    </form>
+                                </div>
+                                <div><img src="images/comments.png" alt=""><%=post.get("comment")%></div>
+                                <div><a href="./post?postID=<%=post.get("id_post")%>"><img src="images/share.png" alt=""></a></div>
+                            </div>
+
                         </div>
                     </div>
-                    <div>
-                        <a href="#"><i class="fas fa-ellipsis-v"></i></a>
-                    </div>
                 </div>
-                <div class="status-field">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis dolores praesentium dicta
-                        laborum nihil accusantium odit laboriosam, sed sit autem! <a
-                            href="#">#This_Post_is_Better!!!!</a> </p>
-                    <img src="images/feed-image-1.png" alt="">
-
-                </div>
-                <div class="post-reaction">
-                    <div class="activity-icons">
-                        <div><img src="images/like-blue.png" alt="">120</div>
-                        <div><img src="images/comments.png" alt="">52</div>
-                        <div><img src="images/share.png" alt="">35</div>
-                    </div>
-                    <div class="post-profile-picture">
-                        <img src="images/profile-pic.png " alt=""> <i class=" fas fa-caret-down"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="status-field-container write-post-container">
-                <div class="user-profile-box">
+                <div class="write-post-container" id="popup">
                     <div class="user-profile">
-                        <img src="images/profile-pic.png" alt="">
+                        <img src=".<%=user_profile_1.getAvatar()%>" alt="">
                         <div>
-                            <p> Alex Carry</p>
-                            <small>August 13 1999, 09.18 pm</small>
+                            <p><%=user_profile_1.getFirstName() + " " + user_profile_1.getLastName()%></p>
+                            <small>Public <i class="fas fa-caret-down"></i></small>
                         </div>
                     </div>
-                    <div>
-                        <a href="#"><i class="fas fa-ellipsis-v"></i></a>
-                    </div>
-                </div>
-                <div class="status-field">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis dolores praesentium dicta
-                        laborum nihil accusantium odit laboriosam, sed sit autem! <a
-                            href="#">#This_Post_is_Bigger!!!!</a> </p>
-                    <img src="images/feed-image-2.png" alt="">
 
-                </div>
-                <div class="post-reaction">
-                    <div class="activity-icons">
-                        <div><img src="images/like-blue.png" alt="">120</div>
-                        <div><img src="images/comments.png" alt="">52</div>
-                        <div><img src="images/share.png" alt="">35</div>
-                    </div>
-                    <div class="post-profile-picture">
-                        <img src="images/profile-pic.png " alt=""> <i class=" fas fa-caret-down"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="status-field-container write-post-container">
-                <div class="user-profile-box">
-                    <div class="user-profile">
-                        <img src="images/profile-pic.png" alt="">
-                        <div>
-                            <p> Alex Carry</p>
-                            <small>August 13 1999, 09.18 pm</small>
-                        </div>
-                    </div>
-                    <div>
-                        <a href="#"><i class="fas fa-ellipsis-v"></i></a>
+                    <div class="post-upload-textarea">
+                        <form action="./updatepost?posId=<%=post.get("id_post")%>" method="POST" enctype="multipart/form-data">
+                            <textarea name="content" placeholder="What's on your mind, Alex?" id="" cols="30" rows="3"></textarea>
+                            <div class="add-post-links">
+                                <input class="form-control" name="postAvatar" type="file" id="formFile">
+                                <button type="submit">Post</button>
+                                <a onclick="BlurPost()">Close</a>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="status-field">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis dolores praesentium dicta
-                        laborum nihil accusantium odit laboriosam, sed sit autem! <a
-                            href="#">#This_Post_is_faster!!!!</a> </p>
-                    <img src="images/feed-image-3.png" alt="">
 
-                </div>
-                <div class="post-reaction">
-                    <div class="activity-icons">
-                        <div><img src="images/like-blue.png" alt="">120</div>
-                        <div><img src="images/comments.png" alt="">52</div>
-                        <div><img src="images/share.png" alt="">35</div>
-                    </div>
-                    <div class="post-profile-picture">
-                        <img src="images/profile-pic.png " alt=""> <i class=" fas fa-caret-down"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="status-field-container write-post-container">
-                <div class="user-profile-box">
-                    <div class="user-profile">
-                        <img src="images/profile-pic.png" alt="">
-                        <div>
-                            <p> Alex Carry</p>
-                            <small>August 13 1999, 09.18 pm</small>
-                        </div>
-                    </div>
-                    <div>
-                        <a href="#"><i class="fas fa-ellipsis-v"></i></a>
-                    </div>
-                </div>
-                <div class="status-field">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis dolores praesentium dicta
-                        laborum nihil accusantium odit laboriosam, sed sit autem! <a
-                            href="#">#This_Post_is_perfect!!!!</a> </p>
-                    <img src="images/feed-image-4.png" alt="">
-
-                </div>
-                <div class="post-reaction">
-                    <div class="activity-icons">
-                        <div><img src="images/like-blue.png" alt="">120</div>
-                        <div><img src="images/comments.png" alt="">52</div>
-                        <div><img src="images/share.png" alt="">35</div>
-                    </div>
-                    <div class="post-profile-picture">
-                        <img src="images/profile-pic.png " alt=""> <i class=" fas fa-caret-down"></i>
-                    </div>
-                </div>
-            </div>
+                <% }
+                    }%>
             <button type="button" class="btn-LoadMore" onclick="LoadMoreToggle()">Load More</button>
         </div>
 
