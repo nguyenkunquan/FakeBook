@@ -105,30 +105,10 @@
                     </div>
                 </div>
             </div>
-            <div class="write-post-container" id="popup">
-                <div class="user-profile">
-                    <img src=".<%=u.getAvatar()%>" alt="">
-                    <div>
-                        <p><%=u.getFirstName() + " " + u.getLastName()%></p>
-                        <small>Public <i class="fas fa-caret-down"></i></small>
-                    </div>
-                </div>
-
-                <div class="post-upload-textarea">
-                    <form action="./updatepost?posId=<%=post.get("id_post")%>" method="POST" enctype="multipart/form-data">
-                        <textarea  name="content" placeholder="What's on your mind, <%=u.getLastName()%>?" id="" cols="30" rows="3"></textarea>
-                        <div class="add-post-links">
-                            <input class="form-control" name="postAvatar" type="file" id="formFile">
-                            <button type="submit">Post</button>
-                            <a onclick="BlurPost()">Close</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            
 
             <% }
                 }%>
-            <button type="button" class="btn-LoadMore" onclick="LoadMoreToggle()">Load More</button>
         </div>
 
         <!-- sidebar------------ -->

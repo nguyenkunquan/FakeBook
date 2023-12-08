@@ -4,6 +4,7 @@
     Author     : ADMIN
 --%>
 
+<%@page import="Service.PostService"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Set"%>
@@ -19,6 +20,7 @@
         boolean isMyAccount = myAccount.equals(user.getUsername());
         boolean isFriend = request.getAttribute("isFriend") != null ? (boolean) request.getAttribute("isFriend") : null;
         Map<User, Integer> listFriend = (Map<User, Integer>) request.getAttribute("listFriend");
+        List<Map<String, Object>> posts = (List<Map<String, Object>>) request.getAttribute("listPos");
     %> 
 
     <!-- profile-page-------------------------- -->
@@ -211,13 +213,26 @@
 
                     <div class="gallery-photos">
                         <div class="gallery-photos-rowFirst">
-                            <img src="images/photo1.png" alt="">
-                            <img src="images/photo2.png" alt="">
-                            <img src="images/photo3.png" alt="">
+                            <% if (posts != null) { %>
+                            <%      int countPic = 1;
+                                for (Map<String, Object> post : posts) {
 
-                            <img src="images/photo4.png" alt="">
-                            <img src="images/photo5.png" alt="">
-                            <img src="images/photo6.png" alt="">
+                                    if (countPic <= 9) {
+
+
+                            %>
+                            <img src="./<%=post.get("img")%>" alt=""style=<%=post.get("img")==""?"display:none":""%>>
+
+
+
+                            <%    countPic++;
+
+                                        } else {
+                                            break;
+                                        }
+                                    }
+                                }%>
+
                         </div>
                     </div>
                 </div>
@@ -257,18 +272,19 @@
                 <% if (isMyAccount) {%>
                 <div class="write-post-container">
                     <div class="user-profile">
-                        <img src=".<%= user.getAvatar()%>" alt="">
+                        <img src=".<%=u.getAvatar()%>" alt="">
                         <div>
-                            <p> <%= user.getFirstName() + " " + user.getLastName()%></p>
+                            <p><%=u.getFirstName() + " " + u.getLastName()%></p>
                             <small>Public <i class="fas fa-caret-down"></i></small>
                         </div>
                     </div>
 
                     <div class="post-upload-textarea">
-                        <form action="./myprofile" method="POST" enctype="multipart/form-data">
-                            <textarea name="content" placeholder="What's on your mind, <%= user.getLastName()%>?" id="" cols="30" rows="3"></textarea>                   
+                        <form action="./post?check=1" method="POST" enctype="multipart/form-data">
+                            <textarea name="content" placeholder="What's on your mind, <%=u.getLastName()%>?" id="" cols="30" rows="3"></textarea>
+
                             <div class="add-post-links">
-                                <input class="form-control" name="cusAvatar" type="file" id="formFile">
+                                <input class="form-control" name="postAvatar" type="file" id="formFile">
                                 <button type="submit">Post</button>
                             </div>
                         </form>
@@ -276,134 +292,52 @@
                 </div>
                 <% }%>
 
-                <div class="status-field-container write-post-container">
-                    <div class="user-profile-box">
-                        <div class="user-profile">
-                            <img src="images/profile-pic.png" alt="">
-                            <div>
-                                <p> Alex Carry</p>
-                                <small>August 13 1999, 09.18 pm</small>
+                <% if (posts != null) { %>
+                <% for (Map<String, Object> post : posts) {
+                        PostService postService = new PostService();
+                        String postStr = String.valueOf(post.get("id_post"));
+                        int postID = Integer.parseInt(postStr);
+                        boolean isLiked = postService.isLiked(postID, u.getUsername());
+                        //             boolean isLiked = true;
+                %>
+                <div class="total1" id="blur">
+                    <div class="status-field-container write-post-container" >               
+                        <div class="user-profile-box">
+                            <div class="user-profile">
+                                <a href="./myprofile?people_name=<%=post.get("user_name")%>"><img src=".<%=post.get("avatar")%>" alt=""></a>
+
+                                <div>
+                                    <p><%=post.get("first_name") + " " + post.get("last_name")%></p>
+                                    <small><%=post.get("createdTime")%></small>
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <a href="#"><i class="fas fa-ellipsis-v"></i></a>
-                        </div>
-                    </div>
-                    <div class="status-field">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis dolores praesentium dicta
-                            laborum nihil accusantium odit laboriosam, sed sit autem! <a
-                                href="#">#This_Post_is_Better!!!!</a>
-                        </p>
-                        <img src="images/feed-image-1.png" alt="">
 
-                    </div>
-                    <div class="post-reaction">
-                        <div class="activity-icons">
-                            <div><img src="images/like-blue.png" alt="">120</div>
-                            <div><img src="images/comments.png" alt="">52</div>
-                            <div><img src="images/share.png" alt="">35</div>
+                        <div class="status-field">
+                            <p><%=post.get("content")%> </p>
+                            <%
+                                String show = (String) post.get("img");
+                                if (show.length() > 10) {%>
+                            <img src=".<%=post.get("img")%>" alt="card image cap">
+                            <%}%>
                         </div>
-                        <div class="post-profile-picture">
-                            <img src="images/profile-pic.png " alt=""> <i class=" fas fa-caret-down"></i>
+                        <div class="post-reaction">
+                            <div class="activity-icons">
+                                <div>       
+                                    <img  src=<%=isLiked ? "images/like-blue.png" : "images/like.png"%>>
+                                    <%=post.get("like_num")%>
+                                </div>
+                                <div><img src="images/comments.png" alt=""><%=post.get("comment")%></div>
+                                <div><a href="./post?postID=<%=post.get("id_post")%>"><img src="images/share.png" alt=""></a></div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-                <div class="status-field-container write-post-container">
-                    <div class="user-profile-box">
-                        <div class="user-profile">
-                            <img src="images/profile-pic.png" alt="">
-                            <div>
-                                <p> Alex Carry</p>
-                                <small>August 13 1999, 09.18 pm</small>
-                            </div>
-                        </div>
-                        <div>
-                            <a href="#"><i class="fas fa-ellipsis-v"></i></a>
-                        </div>
-                    </div>
-                    <div class="status-field">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis dolores praesentium dicta
-                            laborum nihil accusantium odit laboriosam, sed sit autem! <a
-                                href="#">#This_Post_is_Bigger!!!!</a>
-                        </p>
-                        <img src="images/feed-image-2.png" alt="">
 
-                    </div>
-                    <div class="post-reaction">
-                        <div class="activity-icons">
-                            <div><img src="images/like-blue.png" alt="">120</div>
-                            <div><img src="images/comments.png" alt="">52</div>
-                            <div><img src="images/share.png" alt="">35</div>
-                        </div>
-                        <div class="post-profile-picture">
-                            <img src="images/profile-pic.png " alt=""> <i class=" fas fa-caret-down"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="status-field-container write-post-container">
-                    <div class="user-profile-box">
-                        <div class="user-profile">
-                            <img src="images/profile-pic.png" alt="">
-                            <div>
-                                <p> Alex Carry</p>
-                                <small>August 13 1999, 09.18 pm</small>
-                            </div>
-                        </div>
-                        <div>
-                            <a href="#"><i class="fas fa-ellipsis-v"></i></a>
-                        </div>
-                    </div>
-                    <div class="status-field">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis dolores praesentium dicta
-                            laborum nihil accusantium odit laboriosam, sed sit autem! <a
-                                href="#">#This_Post_is_faster!!!!</a>
-                        </p>
-                        <img src="images/feed-image-3.png" alt="">
 
-                    </div>
-                    <div class="post-reaction">
-                        <div class="activity-icons">
-                            <div><img src="images/like-blue.png" alt="">120</div>
-                            <div><img src="images/comments.png" alt="">52</div>
-                            <div><img src="images/share.png" alt="">35</div>
-                        </div>
-                        <div class="post-profile-picture">
-                            <img src="images/profile-pic.png " alt=""> <i class=" fas fa-caret-down"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="status-field-container write-post-container">
-                    <div class="user-profile-box">
-                        <div class="user-profile">
-                            <img src="images/profile-pic.png" alt="">
-                            <div>
-                                <p> Alex Carry</p>
-                                <small>August 13 1999, 09.18 pm</small>
-                            </div>
-                        </div>
-                        <div>
-                            <a href="#"><i class="fas fa-ellipsis-v"></i></a>
-                        </div>
-                    </div>
-                    <div class="status-field">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis dolores praesentium dicta
-                            laborum nihil accusantium odit laboriosam, sed sit autem! <a
-                                href="#">#This_Post_is_perfect!!!!</a>
-                        </p>
-                        <img src="images/feed-image-4.png" alt="">
-
-                    </div>
-                    <div class="post-reaction">
-                        <div class="activity-icons">
-                            <div><img src="images/like-blue.png" alt="">120</div>
-                            <div><img src="images/comments.png" alt="">52</div>
-                            <div><img src="images/share.png" alt="">35</div>
-                        </div>
-                        <div class="post-profile-picture">
-                            <img src="images/profile-pic.png " alt=""> <i class=" fas fa-caret-down"></i>
-                        </div>
-                    </div>
-                </div>
+                <% }
+                    }%>
             </div>
         </div>
     </div>
