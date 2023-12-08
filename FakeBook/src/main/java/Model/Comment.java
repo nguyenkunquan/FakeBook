@@ -11,19 +11,53 @@ import java.sql.Timestamp;
  * @author ADMIN
  */
 public class Comment {
+    private int idComment;
     private int idPost;
-    private int idUser;
+    private String userName;
     private String content;
     private Timestamp createdTime;
-    
+
     public Comment() {
     }
 
-    public Comment(int idPost, int idUser, String content, Timestamp createdTime) {
+    public Comment(int idComment, int idPost, String userName, String content, Timestamp createdTime) {
+        this.idComment = idComment;
         this.idPost = idPost;
-        this.idUser = idUser;
+        this.userName = userName;
         this.content = content;
         this.createdTime = createdTime;
+    }
+
+    public int getIdComment() {
+        return idComment;
+    }
+
+    public void setIdComment(int idComment) {
+        this.idComment = idComment;
+    }
+
+    public int getIdPost() {
+        return idPost;
+    }
+
+    public void setIdPost(int idPost) {
+        this.idPost = idPost;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Timestamp getCreatedTime() {
@@ -34,29 +68,9 @@ public class Comment {
         this.createdTime = createdTime;
     }
 
-    public void setIdPost(int idPost) {
-        this.idPost = idPost;
-    }
-
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
-    }
-
-    public int getIdPost() {
-        return idPost;
-    }
-
-    public int getIdUser() {
-        return idUser;
-    }
-
     
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
+    
+    
+    
     
 }
