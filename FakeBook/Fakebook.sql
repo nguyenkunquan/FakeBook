@@ -36,14 +36,14 @@ CREATE TABLE POST (
     comment INT,
     user_name VARCHAR(50) NOT NULL,
     createdTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_name) REFERENCES USER_Account(user_name)
+    FOREIGN KEY(user_name) REFERENCES USER_Account(user_name) ON DELETE CASCADE
 );
 
 -- Tạo bảng LIKE_status
 CREATE TABLE LIKE_status (
     id_post INT NOT NULL,
     user_name VARCHAR(50) NOT NULL,
-    FOREIGN KEY(id_post) REFERENCES POST(id_post),
+    FOREIGN KEY(id_post) REFERENCES POST(id_post) ON DELETE CASCADE,
     FOREIGN KEY(user_name) REFERENCES USER_Account(user_name),
     PRIMARY KEY(id_post, user_name)
 );
@@ -55,7 +55,7 @@ CREATE TABLE COMMENT_status (
     user_name VARCHAR(50) NOT NULL,
     content NVARCHAR(10000),
     createdTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(id_post) REFERENCES POST(id_post),
+    FOREIGN KEY(id_post) REFERENCES POST(id_post) ON DELETE CASCADE,
     FOREIGN KEY(user_name) REFERENCES USER_Account(user_name)
 );
 	
