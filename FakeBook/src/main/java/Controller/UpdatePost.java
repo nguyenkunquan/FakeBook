@@ -88,9 +88,9 @@ public class UpdatePost extends HttpServlet {
         System.out.println(posID);
         try{
         Part avatarPart = request.getPart("postAvatar");
-        String folderUpload = "/files";
-        String pathUploadFolder = request.getServletContext().getRealPath(folderUpload);
-        String fileName = Paths.get(avatarPart.getSubmittedFileName()).getFileName().toString();
+        // String folderUpload = "/files";
+        // String pathUploadFolder = request.getServletContext().getRealPath(folderUpload);
+        // String fileName = Paths.get(avatarPart.getSubmittedFileName()).getFileName().toString();
         // check pathUploadFolder tồn tại hay chưa.
         if (!Files.exists(Paths.get(pathUploadFolder))) {
             Files.createDirectories(Paths.get(pathUploadFolder));
