@@ -62,7 +62,7 @@
                     <textarea name="content" placeholder="What's on your mind,<%=user_profile_1.getLastName()%>?" id="" cols="30" rows="3"></textarea>
                     
                     <div class="add-post-links">
-                            <input class="form-control" name="cusAvatar" type="file" id="formFile">
+                            <input class="form-control" name="postAvatar" type="file" id="formFile">
                         <button type="submit">Post</button>
                     </div>
                     </form>
