@@ -120,7 +120,7 @@ BEGIN
     SELECT OLD.id_post INTO postId;
 
     IF EXISTS (SELECT 1 FROM POST WHERE id_post = postId) THEN
-        UPDATE Pcomment_statusOST
+        UPDATE comment_status
         SET like_num = like_num - 1
         WHERE id_post = postId;
     END IF;
