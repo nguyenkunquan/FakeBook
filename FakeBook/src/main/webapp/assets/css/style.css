@@ -871,3 +871,112 @@ img.coverImage {
     background-color: #e0e0e0;
     border-radius: 5px;
 }
+
+/* css cua phu */
+#dropdown{
+    appearance: none;
+    padding: 5px;
+    background-color: #859991;
+    color: white;
+    border: none;
+    font-family: inherit;
+    outline: none;
+
+}
+
+
+.select-post {
+    position: relative;
+    display: inline-block;
+}
+
+.select-post ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.select-post li {
+    display: inline-block;
+}
+
+.select-post li a {
+    color: black;
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+}
+
+/* Style the dropdown menu cua Phu */
+.select-post ul ul {
+    position: absolute;
+    top: 100%;
+    display: none;
+    min-width: 150px; 
+
+.select-post ul ul li {
+    display: block;
+}
+
+.select-post li:hover ul {
+    display: block;
+}
+
+
+.select-post ul ul li a:hover {
+    cursor: pointer;
+}
+
+
+.select-post ul ul li a img {
+    width: 16px;
+    height: 16px;
+    margin-right: 10px; 
+}
+
+.select-post:hover ul ul {
+    display: block;
+}
+
+        #popup{
+            position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    padding: 50px;
+    box-shadow: 5px 5px 5px 1px rgba(0, 0, 0, .30);
+    background: #fff;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s;
+    z-index: 999;
+        }
+        #popup.active{
+            top: 50%;
+            visibility: visible;
+            opacity: 1;
+            transition: 0.5s;
+        }
+
+
+#mainContent{
+    position:relative;
+    line-height:1em;
+    overflow:hidden;
+}
+.showContent{
+    height: 2em;
+}
+.hideContent{
+    height: auto;
+}
+#moreButton{
+    position:absolute;                 
+    bottom:0;                         
+    right:0;        
+    cursor:pointer;
+    background:white;    
+    padding-left:4px;             
+}
+
