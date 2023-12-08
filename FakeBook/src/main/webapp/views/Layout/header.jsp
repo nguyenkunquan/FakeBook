@@ -5,10 +5,11 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
 
     <%@page import="Model.User"%>
     <%@page import="javax.servlet.http.HttpSession"%>
+<%
+
     String search = request.getAttribute("search_name") != null ? (String)request.getAttribute("search_name") : null;
     User user_profile = (User) request.getSession().getAttribute("user_name_pro");
 
