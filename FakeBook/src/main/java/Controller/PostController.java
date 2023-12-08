@@ -98,10 +98,10 @@ public class PostController extends HttpServlet {
             request.setAttribute("isLiked", isLiked);
             request.setAttribute("user_name", user_name);
 
-        }else{
+        } else {
             request.setAttribute("isExist", isExist);
         }
-        
+
         request.getRequestDispatcher("/views/Home/post.jsp").forward(request, response);
     }
 
@@ -124,9 +124,9 @@ public class PostController extends HttpServlet {
             String pathUploadFolder = request.getServletContext().getRealPath(folderUpload);
             String fileName = Paths.get(avatarPart.getSubmittedFileName()).getFileName().toString();
             // check pathUploadFolder tồn tại hay chưa.
-            if (!Files.exists(Paths.get(pathUploadFolder))) {
-                Files.createDirectories(Paths.get(pathUploadFolder));
-            }
+//            if (!Files.exists(Paths.get(pathUploadFolder))) {
+//                Files.createDirectories(Paths.get(pathUploadFolder));
+//            }
             String urlAvatar = pathUploadFolder + "/" + fileName;
             avatarPart.write(urlAvatar);
             String avatarInsert = folderUpload + "/" + fileName;
@@ -136,7 +136,16 @@ public class PostController extends HttpServlet {
             PostService postService = new PostService();
             int result = postService.insertPost(post);
             if (result > 0) {
-                response.sendRedirect("./Home");
+                String checkStr = request.getParameter("check") != null ? (String) request.getParameter("check") : "0";
+                System.out.println(checkStr);
+                int check = Integer.parseInt(checkStr);
+                if (check == 1) {
+                    response.sendRedirect("./myprofile?people_name=" + (String) request.getSession().getAttribute("User"));
+                } else {
+                    response.sendRedirect("./Home");
+//                    request.getRequestDispatcher("/views/Home/post.jsp").forward(request, response);
+                }
+
                 return;
             }
             response.sendRedirect("./post");
@@ -144,7 +153,15 @@ public class PostController extends HttpServlet {
             Post post = new Post(content, "", 0, 0, user_name);
             PostService postService = new PostService();
             int result = postService.insertPost(post);
-            response.sendRedirect("./Home");
+            String checkStr = request.getParameter("check") != null ? (String) request.getParameter("check") : "0";
+            System.out.println(checkStr);
+            int check = Integer.parseInt(checkStr);
+            if (check == 1) {
+                response.sendRedirect("./myprofile?people_name=" + (String) request.getSession().getAttribute("User"));
+            } else {
+                response.sendRedirect("./Home");
+//                    request.getRequestDispatcher("/views/Home/post.jsp").forward(request, response);
+            }
 
         }
 

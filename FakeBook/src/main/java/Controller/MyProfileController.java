@@ -81,7 +81,10 @@ public class MyProfileController extends HttpServlet {
             request.setAttribute("isFriend", false);
             request.setAttribute("listFriend", friendListService.getFriendList(myAccount));
         }
-        
+        MyProfileService myProfileService = new MyProfileService();
+         
+        request.setAttribute("listPos", myProfileService.selectAllPostByUserName(request.getParameter("people_name")));
+
         request.getRequestDispatcher("views/MyProfile/myprofile.jsp").forward(request, response);
     }
 
@@ -105,9 +108,9 @@ public class MyProfileController extends HttpServlet {
             String pathUploadFolder = request.getServletContext().getRealPath(folderUpload);
             String fileName = Paths.get(coverPart.getSubmittedFileName()).getFileName().toString();
             // check pathUploadFolder tồn tại hay chưa.
-            if (!Files.exists(Paths.get(pathUploadFolder))) {
-                Files.createDirectories(Paths.get(pathUploadFolder));
-            }
+//            if (!Files.exists(Paths.get(pathUploadFolder))) {
+//                Files.createDirectories(Paths.get(pathUploadFolder));
+//            }
             String urlCover = pathUploadFolder + "/" + fileName;
             coverPart.write(urlCover);
 

@@ -70,6 +70,7 @@ public class SearchController extends HttpServlet {
         SearchService searchService = new SearchService();
         
         request.setAttribute("listPeople", searchService.getAllUserByName(user_name,search));
+        request.setAttribute("listPost", searchService.selectAllPostByContent(user_name, search));
         request.setAttribute("user_name", user_name);
         request.setAttribute("search_name", search);
         RequestDispatcher rd = request.getRequestDispatcher("/views/Search/search.jsp");

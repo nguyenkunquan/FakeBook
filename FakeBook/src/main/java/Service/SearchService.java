@@ -7,10 +7,16 @@ package Service;
 import DAO.PostDAO;
 import DAO.UserDAO;
 import Model.User;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import utilities.JDBCUtil;
 
 /**
  *
@@ -50,4 +56,9 @@ public class SearchService {
     public int addFriend(String user_name, String people_name){
         return userDAO.addFriend(user_name, people_name);
     }
+    public List<Map<String, Object>> selectAllPostByContent(String user_name, String content) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        list = postDAO.selectAllPostByContent(user_name, content);
+        return list;
+    } 
 }

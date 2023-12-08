@@ -4,6 +4,7 @@
  */
 package Service;
 
+import DAO.PostDAO;
 import DAO.UserDAO;
 import Model.User;
 import java.sql.Connection;
@@ -13,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -21,9 +24,11 @@ import java.sql.Statement;
 public class MyProfileService {
 
     private UserDAO userDao;
+    private PostDAO postDao;
 
     public MyProfileService() {
         this.userDao = UserDAO.getInstance();
+        this.postDao = PostDAO.getInstance();
     }
 
     public User getMyProfileByUserName(String userName) {
@@ -34,5 +39,8 @@ public class MyProfileService {
     }
     public int updateMyProfile(String userName, String gender, Date birthDay, String phone, String email) {
         return userDao.updateMyProfile(userName, gender, birthDay, phone, email);
+    }
+    public List<Map<String, Object>> selectAllPostByUserName(String userName) {
+        return postDao.selectAllPostByUserName(userName);
     }
 }

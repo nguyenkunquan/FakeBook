@@ -94,7 +94,8 @@ public class PostDAO {
         }
         return 0;
     }
-    public List<Post> selectPostById(int postId){
+
+    public List<Post> selectPostById(int postId) {
         List<Post> list = new ArrayList<>();
 
         try {
@@ -121,6 +122,7 @@ public class PostDAO {
         }
         return list;
     }
+
     public List<Map<String, Object>> selectAllPost() {
         List<Map<String, Object>> list = new ArrayList<>();
         try {
@@ -128,6 +130,65 @@ public class PostDAO {
             Statement stmt = connection.createStatement();
             // get data from table 'customer'
             ResultSet rs = stmt.executeQuery("  select * from POST p , user_account u WHERE p.user_name = u.user_name   ORDER BY createdTime DESC;");
+            // map customer data
+            while (rs.next()) {
+                Map<String, Object> rowMap = new HashMap<>();
+                rowMap.put("id_post", rs.getObject(1));
+                rowMap.put("content", rs.getString(2));
+                rowMap.put("img", rs.getString(3));
+                rowMap.put("like_num", rs.getInt(4));
+                rowMap.put("comment", rs.getInt(5));
+                rowMap.put("user_name", rs.getString(6));
+                rowMap.put("createdTime", rs.getDate(7));
+                rowMap.put("id_user", rs.getString(8));
+                rowMap.put("first_name", rs.getString(15));
+                rowMap.put("last_name", rs.getString(16));
+                rowMap.put("avatar", rs.getString(17));
+                list.add(rowMap);
+            }
+            JDBCUtil.closeConnection(connection);
+        } catch (SQLException e) {
+            System.out.println("errror:: " + e.getMessage());
+        }
+        return list;
+    }
+
+    public List<Map<String, Object>> selectAllPostByContent(String user_name, String content) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            Statement stmt = connection.createStatement();
+            // get data from table 'customer'
+            ResultSet rs = stmt.executeQuery("  select * from POST p , user_account u WHERE p.user_name = u.user_name AND p.content LIKE '%" + content + "%' AND u.user_name <> '" + user_name + "' ORDER BY createdTime DESC;");
+            // map customer data
+            while (rs.next()) {
+                Map<String, Object> rowMap = new HashMap<>();
+                rowMap.put("id_post", rs.getObject(1));
+                rowMap.put("content", rs.getString(2));
+                rowMap.put("img", rs.getString(3));
+                rowMap.put("like_num", rs.getInt(4));
+                rowMap.put("comment", rs.getInt(5));
+                rowMap.put("user_name", rs.getString(6));
+                rowMap.put("createdTime", rs.getDate(7));
+                rowMap.put("id_user", rs.getString(8));
+                rowMap.put("first_name", rs.getString(15));
+                rowMap.put("last_name", rs.getString(16));
+                rowMap.put("avatar", rs.getString(17));
+                list.add(rowMap);
+            }
+            JDBCUtil.closeConnection(connection);
+        } catch (SQLException e) {
+            System.out.println("errror:: " + e.getMessage());
+        }
+        return list;
+    }
+    public List<Map<String, Object>> selectAllPostByUserName(String userName) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            Statement stmt = connection.createStatement();
+            // get data from table 'customer'
+            ResultSet rs = stmt.executeQuery("select * from POST p , user_account u WHERE p.user_name = u.user_name and u.user_name = '" + userName +"' ORDER BY createdTime DESC;");
             // map customer data
             while (rs.next()) {
                 Map<String, Object> rowMap = new HashMap<>();
@@ -262,6 +323,7 @@ public class PostDAO {
         }
         return list;
     }
+
     //comment
     public int insertComment(int id_post, String user_name, String content) {
         try {
@@ -284,6 +346,7 @@ public class PostDAO {
         }
         return 0;
     }
+
     public int deleteComment(int id_comment) {
         try {
             Connection connection = JDBCUtil.getConnection();
@@ -302,14 +365,15 @@ public class PostDAO {
         }
         return 0;
     }
-    public List<Comment> selectAllComment(int id_post){
+
+    public List<Comment> selectAllComment(int id_post) {
         List<Comment> list = new ArrayList<>();
 
         try {
             Connection connection = JDBCUtil.getConnection();
             Statement stmt = connection.createStatement();
             // get data from table 'customer'
-            ResultSet rs = stmt.executeQuery("  select * from comment_status WHERE id_post = " + id_post+" ORDER BY createdTime DESC");
+            ResultSet rs = stmt.executeQuery("  select * from comment_status WHERE id_post = " + id_post + " ORDER BY createdTime DESC");
             // map customer data
             while (rs.next()) {
                 Comment comment = new Comment();
