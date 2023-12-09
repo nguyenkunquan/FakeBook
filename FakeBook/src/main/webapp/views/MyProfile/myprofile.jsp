@@ -65,6 +65,10 @@
                     <%if (isFriend) {
                     %>
                     <button type="button">Friend</button>
+                    <a href="./deletefriend?people_name=<%= user.getUsername()%>">
+                        <button type="button" style="background-color: #1876f1;color: #fff;"><img src="images/unfriend.png" alt="alt" style="height: 18px;"/> Unfriend</button>
+                    </a>
+
                     <%
                     } else {
                     %>
@@ -74,7 +78,7 @@
                     <%
                         }
                     %>
-                    <button type="button"><i class="far fa-envelope"></i> messages</button>
+
                 </div>
             </div>
             <% }%>
@@ -281,7 +285,7 @@
                         int postID = Integer.parseInt(postStr);
                         boolean isLiked = postService.isLiked(postID, u.getUsername());
                         //             boolean isLiked = true;
-%>
+                %>
                 <div class="total1" id="blur">
                     <div class="status-field-container write-post-container" >               
                         <div class="user-profile-box">
