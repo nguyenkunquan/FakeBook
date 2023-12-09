@@ -219,9 +219,9 @@
 
                                     if (countPic <= 9) {
 
-
+                                    String avatar = (String) post.get("img");
                             %>
-                            <img src="./<%=post.get("img")%>" alt=""style=<%=post.get("img")==""?"display:none":""%>>
+                            <img src="./<%=post.get("img")%>" alt=""style=<%=avatar.equals("")?"display:none":""%>>
 
 
 
