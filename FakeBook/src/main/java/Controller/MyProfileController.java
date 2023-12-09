@@ -71,18 +71,18 @@ public class MyProfileController extends HttpServlet {
         User user = new MyProfileService().getMyProfileByUserName(request.getParameter("people_name")); //thay "quan" = request.getParameter("people_name")
         SearchService searchService = new SearchService();
         FriendListService friendListService = new FriendListService();
-        
+
         request.setAttribute("myAccount", myAccount);
         request.setAttribute("user", user);
         if (!user.getUsername().equals(myAccount)) {
             request.setAttribute("isFriend", searchService.isFriend(myAccount, user.getUsername()));
             request.setAttribute("listFriend", friendListService.getFriendList(user.getUsername()));
-        }else{
+        } else {
             request.setAttribute("isFriend", false);
             request.setAttribute("listFriend", friendListService.getFriendList(myAccount));
         }
         MyProfileService myProfileService = new MyProfileService();
-         
+
         request.setAttribute("listPos", myProfileService.selectAllPostByUserName(request.getParameter("people_name")));
 
         request.getRequestDispatcher("views/MyProfile/myprofile.jsp").forward(request, response);
@@ -101,49 +101,48 @@ public class MyProfileController extends HttpServlet {
             throws ServletException, IOException {
         String myAccount = (String) request.getSession().getAttribute("User");
         MyProfileService myProfileService = new MyProfileService();
-
-        if (request.getPart("cusCover") != null) {
-            Part coverPart = request.getPart("cusCover");
-            String folderUpload = "/files";
-            String pathUploadFolder = request.getServletContext().getRealPath(folderUpload);
-            String fileName = Paths.get(coverPart.getSubmittedFileName()).getFileName().toString();
-            // check pathUploadFolder tồn tại hay chưa.
+        try {
+            if (request.getPart("cusCover") != null) {
+                Part coverPart = request.getPart("cusCover");
+                String folderUpload = "/files";
+                String pathUploadFolder = request.getServletContext().getRealPath(folderUpload);
+                String fileName = Paths.get(coverPart.getSubmittedFileName()).getFileName().toString();
+                // check pathUploadFolder tồn tại hay chưa.
 //            if (!Files.exists(Paths.get(pathUploadFolder))) {
 //                Files.createDirectories(Paths.get(pathUploadFolder));
 //            }
-            String urlCover = pathUploadFolder + "/" + fileName;
-            coverPart.write(urlCover);
+                String urlCover = pathUploadFolder + "/" + fileName;
+                coverPart.write(urlCover);
 
-            // build model customer
-            String coverInsert = folderUpload + "/" + fileName;
+                // build model customer
+                String coverInsert = folderUpload + "/" + fileName;
 
-            myProfileService.updateMyProfile(myAccount, myProfileService.getMyProfileByUserName(myAccount).getAvatar(), coverInsert);
-        }
-
-        if (request.getPart("cusAvatar") != null) {
-            Part avatarPart = request.getPart("cusAvatar");
-            String folderUpload = "/files";
-            String pathUploadFolder = request.getServletContext().getRealPath(folderUpload);
-            String fileName = Paths.get(avatarPart.getSubmittedFileName()).getFileName().toString();
-            // check pathUploadFolder tồn tại hay chưa.
-            if (!Files.exists(Paths.get(pathUploadFolder))) {
-                Files.createDirectories(Paths.get(pathUploadFolder));
+                myProfileService.updateMyProfile(myAccount, myProfileService.getMyProfileByUserName(myAccount).getAvatar(), coverInsert);
             }
-            String urlAvatar = pathUploadFolder + "/" + fileName;
-            avatarPart.write(urlAvatar);
+        } catch (Exception e) {
+        }
+        try {
+            if (request.getPart("cusAvatar") != null) {
+                Part avatarPart = request.getPart("cusAvatar");
+                String folderUpload = "/files";
+                String pathUploadFolder = request.getServletContext().getRealPath(folderUpload);
+                String fileName = Paths.get(avatarPart.getSubmittedFileName()).getFileName().toString();
+                // check pathUploadFolder tồn tại hay chưa.
+                if (!Files.exists(Paths.get(pathUploadFolder))) {
+                    Files.createDirectories(Paths.get(pathUploadFolder));
+                }
+                String urlAvatar = pathUploadFolder + "/" + fileName;
+                avatarPart.write(urlAvatar);
 
-            // build model customer
-            String avatarInsert = folderUpload + "/" + fileName;
+                // build model customer
+                String avatarInsert = folderUpload + "/" + fileName;
 
-            myProfileService.updateMyProfile(myAccount, avatarInsert, myProfileService.getMyProfileByUserName(myAccount).getBackground());
+                myProfileService.updateMyProfile(myAccount, avatarInsert, myProfileService.getMyProfileByUserName(myAccount).getBackground());
+            }
+        } catch (Exception e) {
         }
 
-        if (request.getParameter("content") != null || request.getPart("cusAvatar") != null) {
-
-            //COPY CODE TỪ PostController vào đây
-        }
-
-        response.sendRedirect("./myprofile?people_name="+myAccount);
+        response.sendRedirect("./myprofile?people_name=" + myAccount);
     }
 
     /**

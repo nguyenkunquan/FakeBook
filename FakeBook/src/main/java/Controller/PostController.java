@@ -153,6 +153,7 @@ public class PostController extends HttpServlet {
             Post post = new Post(content, "", 0, 0, user_name);
             PostService postService = new PostService();
             int result = postService.insertPost(post);
+            /// my profile
             String checkStr = request.getParameter("check") != null ? (String) request.getParameter("check") : "0";
             System.out.println(checkStr);
             int check = Integer.parseInt(checkStr);
