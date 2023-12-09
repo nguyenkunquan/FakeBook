@@ -216,12 +216,15 @@
                             <% if (posts != null) { %>
                             <%      int countPic = 1;
                                 for (Map<String, Object> post : posts) {
-
+                                    String avatar = (String) post.get("img");
+                                    if (avatar.equals("")) {
+                                        continue;    
+                                    }
                                     if (countPic <= 9) {
 
-                                    String avatar = (String) post.get("img");
+                                    
                             %>
-                            <img src="./<%=post.get("img")%>" alt=""style=<%=avatar.equals("")?"display:none":""%>>
+                            <img src="./<%=post.get("img")%>" alt="">
 
 
 
