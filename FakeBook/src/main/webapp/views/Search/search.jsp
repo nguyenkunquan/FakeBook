@@ -34,7 +34,14 @@
 
             <div class="people-field">
                 <h2>People</h2>
-                <%  for (Map.Entry<User, Boolean> entry : users.entrySet()) {
+                <%  if (users.size() == 0) {
+                %>
+                <div class="user-profile-search">
+                    <p>User is not available!</p>
+                </div>
+                <%
+                } else {
+                    for (Map.Entry<User, Boolean> entry : users.entrySet()) {
                         User key = entry.getKey();
                         Boolean value = entry.getValue();
                         if (value) {%>
@@ -64,11 +71,12 @@
                     </div>
                 </div>
                 <%
+                            }
                         }
                     }
                 %>
             </div>
-            <% if (posts != null) { %>
+            <% if (posts.size() != 0) { %>
             <% for (Map<String, Object> post : posts) {
                     PostService postService = new PostService();
                     String postStr = String.valueOf(post.get("id_post"));
@@ -112,8 +120,16 @@
 
 
             <% }
+            } else {
+            %>
+            <div class="total1" id="blur">
+                <div class="status-field-container write-post-container" style="text-align: center">               
+                    <p>There are no related posts</p>
+                </div>
+            </div>
+            <%
                 }%>
-            
+
         </div>
 
     </div>
