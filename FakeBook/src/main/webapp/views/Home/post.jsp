@@ -114,7 +114,11 @@
 
                             <div class="status-field">
                                 <p><%=post.get("content")%> </p>
+                                <%
+                                    String show = (String) post.get("img");
+                                    if (show.length() > 10) {%>
                                 <img src=".<%=post.get("img")%>" alt="card image cap">
+                                <%}%>
 
                             </div>
                             <div class="post-reaction">
