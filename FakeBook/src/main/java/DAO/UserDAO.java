@@ -192,7 +192,7 @@ public class UserDAO {
         }
         return 0;
     }
-    
+
     public int updateMyProfile(String userName, String gender, Date birthDay, String phone, String email) {
         try {
             Connection connection = JDBCUtil.getConnection();
@@ -205,7 +205,7 @@ public class UserDAO {
             preparedStatement.setDate(2, birthDay);
             preparedStatement.setString(3, phone);
             preparedStatement.setString(4, email);
-            preparedStatement.setString(5,userName);
+            preparedStatement.setString(5, userName);
 
             // Thực hiện update
             int rowsUpdated = preparedStatement.executeUpdate();
@@ -292,6 +292,28 @@ public class UserDAO {
             // Thiết lập các tham số trong truy vấn
             preparedStatement.setString(1, user_name);
             preparedStatement.setString(2, people_name);
+            // Thực hiện INSERT
+            int rowsInserted = preparedStatement.executeUpdate();
+            JDBCUtil.closeConnection(connection);
+            return rowsInserted;
+        } catch (SQLException ex) {
+            System.out.println("error: " + ex.getMessage());
+        }
+        return 0;
+    }
+
+    public int deleteFriend(String user_name, String people_name) {
+        try {
+            Connection connection = JDBCUtil.getConnection();
+            String insertQuery = "DELETE FROM FRIENDSHIP WHERE (user_name_1 = ? AND user_name_2 = ?) OR (user_name_1 = ? AND user_name_2 = ?)";
+            // Tạo PreparedStatement
+            PreparedStatement preparedStatement;
+            preparedStatement = connection.prepareStatement(insertQuery);
+            // Thiết lập các tham số trong truy vấn
+            preparedStatement.setString(1, user_name);
+            preparedStatement.setString(2, people_name);
+            preparedStatement.setString(3, people_name);
+            preparedStatement.setString(4, user_name);
             // Thực hiện INSERT
             int rowsInserted = preparedStatement.executeUpdate();
             JDBCUtil.closeConnection(connection);

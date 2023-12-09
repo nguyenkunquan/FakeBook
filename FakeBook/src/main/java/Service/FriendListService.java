@@ -6,9 +6,13 @@ package Service;
 
 import DAO.UserDAO;
 import Model.User;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import utilities.JDBCUtil;
 
 public class FriendListService {
 
@@ -27,6 +31,9 @@ public class FriendListService {
             list.put(user, list2.size());
         }
         return list;
+    }
+    public int deleteFriend(String user_name, String people_name) {
+        return userDAO.deleteFriend(user_name, people_name);
     }
 
 }
