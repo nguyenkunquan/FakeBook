@@ -100,13 +100,14 @@ public class UpdatePost extends HttpServlet {
             PostDAO postDao = new PostDAO();
             int result = postDao.updateByID(content, avatarInsert, posID);
             if (result > 0) {
-                response.sendRedirect("./Home");
+                response.sendRedirect("./post?postID="+posID);
                 return;
             }
             response.sendRedirect("./post");
         } catch (Exception E) {
-
-            response.sendRedirect("./Home");
+            PostDAO postDao = new PostDAO();
+            int result = postDao.updateByID(content, "", posID);
+            response.sendRedirect("./post?postID="+posID);
 
         }
     }
