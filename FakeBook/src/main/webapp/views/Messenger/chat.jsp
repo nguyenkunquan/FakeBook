@@ -104,8 +104,7 @@
                 /*background-color:#3253C8;*/
             }
             .chatFrame{
-                width: 60%;
-
+                width: 70%;
                 float: left;
                 background-color: rgb(238, 238, 238);
                 height: 85vh;
@@ -337,7 +336,7 @@
             const sendButton = document.getElementById('sendMessage');
             var username = "<%=user%>";
             console.log(username)
-            var websocket = new WebSocket("ws://localhost:8084/FakeBook/endpoint/" + username);
+            var websocket = new WebSocket("ws://localhost:8080/FakeBook/endpoint/" + username);
             websocket.onopen = function (message) {
                 console.log(message)
                 processOpen(message);
