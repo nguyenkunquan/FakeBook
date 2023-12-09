@@ -15,8 +15,7 @@
 <html lang="en">
 
     <%@include file="/views/Layout/header.jsp"%>
-    <%  
-        boolean isExist =(boolean) request.getAttribute("isExist");
+    <%        boolean isExist = (boolean) request.getAttribute("isExist");
         if (!isExist) {
     %>        
     <div class="total" >
@@ -38,7 +37,7 @@
             </div>
         </div>
     </div>    
-    <%}else{ 
+    <%} else {
         String user_name = (String) request.getSession().getAttribute("User");
         Map<String, Object> post = (Map<String, Object>) request.getAttribute("post");
         PostService postService = new PostService();
@@ -177,7 +176,7 @@
                                     <div class="user-profile-box">
                                         <div class="user-profile">
                                             <a href="./myprofile?people_name=<%=value.getUsername()%>"><img src=".<%=value.getAvatar()%>" alt=""></a>
-                                            
+
                                             <div>
                                                 <p><%=value.getFirstName() + " " + value.getLastName()%></p>
                                                 <small><%=key.getCreatedTime()%></small>

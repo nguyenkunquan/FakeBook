@@ -117,7 +117,7 @@
 
             <div class="heading-link">
                 <h4>Conversation</h4>
-                <a href="./Chat">Chat</a>
+                <a href="">Chat</a>
             </div>
             <%
                 Set<Map.Entry<User, Integer>> entrySet = listFriend.entrySet();

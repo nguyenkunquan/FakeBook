@@ -19,7 +19,7 @@ body::before {
 }
 form {
   width: 425px;
-  height: 600px;
+  height: 500px;
   margin-left: 35%;
   margin-top: 5%;
   box-shadow: 0px 5px 8px 3px #aaaa;
